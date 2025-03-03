@@ -1,62 +1,41 @@
 ---
 // Este es el componente donde se va a mostrar la lista de órdenes y vigas
+import { Vigas, Orden,Fecha } from "./database.json";
 ---
-
-<div class="space-y-6">
+{
+Fecha.map(fecha=>(
+<div class="space-y-6 mb-3">
     <!-- Aquí repetimos este bloque por cada fecha -->
-    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-        <div class="flex">
-            <p class="mr-1">Date:</p>
-            <h2 class="text-xl font-semibold text-gray-800">03-01-2025</h2>
-        </div>
-
-        <!-- Lista de órdenes para esa fecha -->
-        <div class="ml-4 space-y-4">
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <h3 class="font-semibold text-lg text-green-600">071</h3>
-
-                <!-- Lista de vigas para esa orden -->
-                <div class="ml-6 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <p class="text-gray-700">
-                            <span class="font-bold"> B42</span> = 20 <span
-                                class="italic">*4/bms</span
-                            > (7'x12"x60')
-                        </p>
-                        <input type="checkbox" name="" id="" />
-                    </div>
-                    <!-- Aquí puedes agregar más vigas si las hay -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Aquí repetimos este bloque por cada fecha -->
-    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-        <div class="flex">
-            <p class="mr-1">Date:</p>
-            <h2 class="text-xl font-semibold text-gray-800">03-01-2025</h2>
-        </div>
-
-        <!-- Lista de órdenes para esa fecha -->
-        <div class="ml-4 space-y-4">
-            <div class="bg-white p-3 rounded-lg shadow-sm">
-                <h3 class="font-semibold text-lg text-green-600">071</h3>
-
-                <!-- Lista de vigas para esa orden -->
-                <div class="ml-6 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <p class="text-gray-700">
-                            <span class="font-bold"> B42</span> = 20 <span
-                                class="italic">*4/bms</span
-                            > (7'x12"x60')
-                        </p>
-                        <input type="checkbox" name="" id="" />
-                    </div>
-                    <!-- Aquí puedes agregar más vigas si las hay -->
-                </div>
-            </div>
-        </div>
+    <div class="flex">
+        <p class="mr-1">Date:</p>
+        <h2 class="text-xl font-semibold text-gray-800">{fecha.date}</h2>
     </div>
 
-    <!-- Repite el bloque anterior para otras fechas -->
+    <!-- Lista de órdenes para esa fecha -->
+{
+  Orden.map(orden=>(
+  <div class="ml-4 space-y-4">
+      <div class="bg-white p-3 rounded-lg shadow-sm">
+          <h3 class="font-semibold text-lg text-green-600">Orden: {orden.number}</h3>
+
+          <!-- Lista de vigas para esa orden -->
+          {
+              Vigas.map((viga) => (
+                  <div class="flex justify-between items-center">
+                      <p class="text-gray-700">
+                          <span class="font-bold"> {viga.name}</span> ={" "}
+                          {viga.quantity}{" "}
+                          <span class="italic">{viga.unit}/bms</span> (
+                          {viga.length}'x{viga.width}"x{viga.height}')
+                      </p>
+                  </div>
+              ))
+          }
+          <!-- Aquí puedes agregar más vigas si las hay -->
+      </div>
+  </div>
+  ))
+}
 </div>
+))
+}
