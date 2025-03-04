@@ -1,28 +1,17 @@
 ---
 import "../styles/global.css";
-import SearchBar from "../components/SearchBar.astro";
-import Title from "../components/Title.astro";
-import OrderList from "../components/OrderList.astro";
+import Inicio from "../components/Index";
 ---
 
 <html>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/public/favicon.svg" type="image/svg+xml" />
+        <link rel="svg" href="/public/favicon.svg" type="image/svg+xml" />
         <title>Inventory Beams</title>
     </head>
-
     <body>
-        <div class="p-6">
-            <Title />
-            <br />
-            <SearchBar />
-            <br />
-            <div class="md:grid md:grid-cols-2">
-                <OrderList />
-            </div>
-        </div>
-
-        <body> </body>
+        <Inicio />
     </body>
 </html>
