@@ -1,20 +1,19 @@
 import React from "react";
 
 export default function SearchBar({ setView }) {
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log("You clicked submit.");
-  }
   return (
     <div className="p-6 flex flex-col items-center">
       <div className="flex w-full justify-around mb-3">
         <button
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer"
-          onClick={handleSubmit}
+          onClick={() => setView("orden")}
         >
           Crear Orden
         </button>
-        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer">
+        <button
+          onClick={() => setView("vigas")}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full cursor-pointer"
+        >
           Crear Viga
         </button>
       </div>
