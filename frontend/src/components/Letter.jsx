@@ -1,9 +1,14 @@
 import React from "react";
 
-export default function Letter() {
+export default function Letter({ setView, view }) {
   return (
-    <div>
-      <h1 class="text-3xl font-bold">Inventory Beams</h1>
+    <div className="flex justify-between items-center">
+      <h1 className="text-3xl font-bold">Inventory Beams</h1>
+      {view === "index" ? null : (
+        <span className="cursor-pointer" onClick={() => setView("index")}>
+          ⬅️
+        </span>
+      )}
     </div>
   );
 }

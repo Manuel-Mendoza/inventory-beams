@@ -9,7 +9,7 @@ export default function Inicio() {
   const [view, setView] = useState("index");
   return (
     <div className="p-6">
-      <Letter />
+      <Letter setView={setView} view={view} />
       <hr />
       {view === "index" ? (
         <>
