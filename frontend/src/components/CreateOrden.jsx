@@ -118,7 +118,7 @@ export default function CrearOrden() {
         )}
 
         <div className="flex max-sm:flex-col col-span-full w-full justify-around">
-          <Button name="Agregar Viga" style={"mb-1"} bg={"blue"} />
+          <Button name="Agregar Viga" style={"mb-1"} bg={"gray"} />
 
           {medidas === 1 ? (
             <Button
