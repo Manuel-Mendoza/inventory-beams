@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Input from "./Maquetado/Input";
+import Button from "./Maquetado/Button";
 
 export default function CrearOrden() {
   const [medidas, setMedidas] = useState(0);
@@ -33,118 +35,109 @@ export default function CrearOrden() {
       </h2>
 
       {/* Input de Número de Orden */}
-      <input
-        type="text"
+      <Input
         placeholder="Número de Orden"
-        value={numeroOrden}
-        className="p-2 border rounded mb-3 w-full min-md:w-1/2"
+        type="number"
+        style={"text-center"}
+        inputmode={"numeric"}
       />
 
       {/* Agregar Vigas */}
-      <div className="mb-4 min-md:grid justify-items-center grid-cols-2 gap-1">
-        <h3 className="text-lg font-semibold col-span-2 text-center">
+      <div className="mb-4 min-md:grid justify-items-center grid-cols-5 gap-1">
+        <h3 className="text-lg font-semibold col-span-5 text-center">
           Agregar Viga
         </h3>
-        <input
-          type="text"
-          placeholder="Nombre de la Viga"
-          value={nuevaViga.nombre}
-          className="w-full p-2 border rounded mt-2"
-        />
-        <input
-          type="number"
-          placeholder="Cantidad"
-          value={nuevaViga.cantidad}
-          className="w-full p-2 border rounded mt-2"
-        />
+        <div className="col-span-full">
+          <Input
+            placeholder="Nombre de la Viga"
+            type="text"
+            style={"text-center uppercase"}
+          />
+          <Input placeholder="Cantidad" type="number" inputmode={"numeric"} />
+        </div>
 
         {medidas === 0 ? (
           <>
-            <div className="grid col-span-2 grid-cols-2 min-md:grid-cols-6 gap-2">
-              <input
-                placeholder="Cara...(Pulgadas)"
-                className="w-full p-2 border rounded mt-2"
-              />
-              <form class="max-w-sm mx-auto">
-                <label for="underline_select" class="sr-only">
-                  Underline select
-                </label>
-                <select
-                  id="underline_select"
-                  class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-                >
-                  <option selected>Inches</option>
-                  <option value="1/8">1/8</option>
-                  <option value="1/4">1/4</option>
-                  <option value="3/8">3/8</option>
-                  <option value="1/2">1/2</option>
-                  <option value="5/8">5/8</option>
-                  <option value="3/4">3/4</option>
-                  <option value="7/8">7/8</option>
-                </select>
-              </form>
+            <Input
+              type="number"
+              placeholder="Cara...(Pulgadas)"
+              inputmode="numeric"
+            />
+            <form class="max-w-sm mx-auto">
+              <label for="underline_select" class="sr-only">
+                Underline select
+              </label>
+              <select
+                id="underline_select"
+                class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+              >
+                <option selected>Inches</option>
+                <option value="1/8">1/8</option>
+                <option value="1/4">1/4</option>
+                <option value="3/8">3/8</option>
+                <option value="1/2">1/2</option>
+                <option value="5/8">5/8</option>
+                <option value="3/4">3/4</option>
+                <option value="7/8">7/8</option>
+              </select>
+            </form>
 
-              <input
-                placeholder="Cuerpo..."
-                className="w-full p-2 border rounded mt-2"
-              />
+            <Input inputmode="numeric" placeholder="Cuerpo..." type="number" />
 
-              <form class="max-w-sm mx-auto">
-                <label for="underline_select" class="sr-only">
-                  Underline select
-                </label>
-                <select
-                  id="underline_select"
-                  class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-                >
-                  <option selected>Inches</option>
-                  <option value="1/8">1/8</option>
-                  <option value="1/4">1/4</option>
-                  <option value="3/8">3/8</option>
-                  <option value="1/2">1/2</option>
-                  <option value="5/8">5/8</option>
-                  <option value="3/4">3/4</option>
-                  <option value="7/8">7/8</option>
-                </select>
-              </form>
+            <form class="max-w-sm mx-auto">
+              <label for="underline_select" class="sr-only">
+                Underline select
+              </label>
+              <select
+                id="underline_select"
+                class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+              >
+                <option selected>Inches</option>
+                <option value="1/8">1/8</option>
+                <option value="1/4">1/4</option>
+                <option value="3/8">3/8</option>
+                <option value="1/2">1/2</option>
+                <option value="5/8">5/8</option>
+                <option value="3/4">3/4</option>
+                <option value="7/8">7/8</option>
+              </select>
+            </form>
 
-              <input
-                placeholder="Largo... (feet)"
-                className="w-full p-2 border rounded mt-2"
-              />
-            </div>
+            <Input
+              placeholder="Largo... (feet)"
+              type="number"
+              inputmode={"numeric"}
+            />
           </>
         ) : (
-          <input
+          <Input
             placeholder="medida... ejemplo: 3 1/2 x 11 7/8 x 60"
-            className="w-full p-2 border rounded mt-2 col-span-2"
+            type={"text"}
+            style={"col-span-full"}
           />
         )}
 
-        <div className="min-md:flex col-span-2 w-full">
-          <button className="mt-3 bg-blue-500 text-white p-2 rounded w-full min-md:w-1/2 mx-1">
-            Agregar Viga
-          </button>
+        <div className="flex max-sm:flex-col col-span-full w-full justify-around">
+          <Button name="Agregar Viga" style={"mb-1"} bg={"blue"} />
+
           {medidas === 1 ? (
-            <button
-              onClick={() => setMedidas(0)}
-              className="mt-3 bg-gray-400 text-white p-2 rounded w-full min-md:w-1/2 mx-1"
-            >
-              volver a medidas definidas
-            </button>
+            <Button
+              bg={"gray"}
+              name={"⬅️"}
+              click={() => setMedidas(0)}
+              style={"mb-1"}
+            />
           ) : (
-            <button
-              onClick={() => setMedidas(1)}
-              className="mt-3 bg-gray-400 text-white p-2 rounded w-full min-md:w-1/2 mx-1"
-            >
-              Otra medida
-            </button>
+            <Button
+              style={"mb-1"}
+              bg={"gray"}
+              name="Otras medidas"
+              click={() => setMedidas(1)}
+            />
           )}
 
           {/* Botón para Enviar la Orden */}
-          <button className="mt-3 bg-green-500 text-white p-2 rounded w-full min-md:w-1/2 mx-1">
-            Crear Orden
-          </button>
+          <Button name="Crear Orden" />
         </div>
         {/* Lista de Vigas Agregadas */}
         <ul className="mb-4">
