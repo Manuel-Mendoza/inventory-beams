@@ -9,7 +9,7 @@ input {
 /* Estilos para escritorio (1024px en adelante) */
 @media screen and (min-width: 1024px) {
     body {
-        padding: 0 25%;
+        padding: 0 20%;
     }
 }
 
