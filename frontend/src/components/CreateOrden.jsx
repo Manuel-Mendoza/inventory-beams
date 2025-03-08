@@ -9,7 +9,12 @@ export default function CrearOrden() {
   const [nuevaViga, setNuevaViga] = useState({
     nombre: "",
     cantidad: "",
-    medidas: "",
+    medidas: {
+      cara: "",
+      altura: "",
+      largo: "",
+      otra: "",
+    },
   });
 
   const agregarViga = () => {
@@ -36,7 +41,10 @@ export default function CrearOrden() {
 
       {/* Input de Número de Orden */}
       <Input
-        onChangeValue={(e) => setNumeroOrden(e.target.value)}
+        onChange={(e) => {
+          setNumeroOrden(e.target.value);
+          console.log("Número de Orden:", numeroOrden);
+        }}
         placeholder="Número de Orden"
         type="number"
         style={"text-center"}
@@ -53,8 +61,14 @@ export default function CrearOrden() {
             placeholder="Nombre de la Viga"
             type="text"
             style={"text-center uppercase"}
+            onChange={(e) => setNuevaViga({ nombre: e.target.value })}
           />
-          <Input placeholder="Cantidad" type="number" inputmode={"numeric"} />
+          <Input
+            placeholder="Cantidad"
+            type="number"
+            inputmode={"numeric"}
+            onChange={(e) => setNuevaViga({ cantidad: e.target.value })}
+          />
         </div>
 
         {medidas === 0 ? (
@@ -63,6 +77,9 @@ export default function CrearOrden() {
               type="number"
               placeholder="Cara...(Pulgadas)"
               inputmode="numeric"
+              onChange={(e) =>
+                setNuevaViga({ medidas: { cara: e.target.value } })
+              }
             />
             <form className="max-w-sm mx-auto">
               <label htmlFor="underline_select" className="sr-only">
@@ -123,7 +140,12 @@ export default function CrearOrden() {
         )}
 
         <div className="flex max-sm:flex-col col-span-full w-full justify-around">
-          <Button name="Agregar Viga" style={"mb-1"} bg={"gray"} />
+          <Button
+            name="Agregar Viga"
+            style={"mb-1"}
+            bg={"gray"}
+            click={() => console.log(numeroOrden)}
+          />
 
           {medidas === 1 ? (
             <Button

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Fecha, Orden, Vigas } from "./database.json";
 import api from "./api";
 
 export default function OrdenesList() {
