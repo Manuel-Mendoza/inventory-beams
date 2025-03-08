@@ -36,6 +36,7 @@ export default function CrearOrden() {
 
       {/* Input de Número de Orden */}
       <Input
+        onChangeValue={(e) => setNumeroOrden(e.target.value)}
         placeholder="Número de Orden"
         type="number"
         style={"text-center"}
@@ -63,15 +64,17 @@ export default function CrearOrden() {
               placeholder="Cara...(Pulgadas)"
               inputmode="numeric"
             />
-            <form class="max-w-sm mx-auto">
-              <label for="underline_select" class="sr-only">
+            <form className="max-w-sm mx-auto">
+              <label htmlFor="underline_select" className="sr-only">
                 Underline select
               </label>
               <select
                 id="underline_select"
-                class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
               >
-                <option selected>Inches</option>
+                <option value=" " defaultValue>
+                  Inches
+                </option>
                 <option value="1/8">1/8</option>
                 <option value="1/4">1/4</option>
                 <option value="3/8">3/8</option>
@@ -82,17 +85,19 @@ export default function CrearOrden() {
               </select>
             </form>
 
-            <Input inputmode="numeric" placeholder="Cuerpo..." type="number" />
+            <Input inputMode="numeric" placeholder="Cuerpo..." type="number" />
 
-            <form class="max-w-sm mx-auto">
-              <label for="underline_select" class="sr-only">
+            <form className="max-w-sm mx-auto">
+              <label htmlFor="underline_select" className="sr-only">
                 Underline select
               </label>
               <select
                 id="underline_select"
-                class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
               >
-                <option selected>Inches</option>
+                <option value=" " defaultValue>
+                  Inches
+                </option>
                 <option value="1/8">1/8</option>
                 <option value="1/4">1/4</option>
                 <option value="3/8">3/8</option>
@@ -137,7 +142,7 @@ export default function CrearOrden() {
           )}
 
           {/* Botón para Enviar la Orden */}
-          <Button name="Crear Orden" />
+          <Button onClick={() => alert("Orden enviada")} name="Crear Orden" />
         </div>
         {/* Lista de Vigas Agregadas */}
         <ul className="mb-4">
