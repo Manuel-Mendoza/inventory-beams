@@ -15,7 +15,7 @@ export default function SearchBar({ setView }) {
           placeholder="Search number order..."
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button className="w-10">🔎</button>
+        <button onClick={()=>console.log(search)} className="w-10" >🔎</button>
       </div>
     </div>
   );
