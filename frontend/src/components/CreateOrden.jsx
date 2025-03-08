@@ -3,29 +3,87 @@ import Input from "./Maquetado/Input";
 import Button from "./Maquetado/Button";
 
 export default function CrearOrden() {
-  const [medidas, setMedidas] = useState(0);
-  const [numeroOrden, setNumeroOrden] = useState("");
-  const [vigas, setVigas] = useState([]);
-  const [nuevaViga, setNuevaViga] = useState({
-    nombre: "",
-    cantidad: "",
-    medidas: {
-      cara: "",
-      altura: "",
-      largo: "",
-      otra: "",
-    },
+  const [medidas, setMedidas] = useState({
+    cara: "",
+    cara_inches: "",
+    cuerpo: "",
+    cuerpo_inches: "",
+    largo: "",
+    otra: "",
   });
+  const [otra, setOtra] = useState(0);
+  const [nombre, setNombre] = useState("");
+  const [cantidad, setCantidad] = useState("");
+  const [numeroOrden, setNumeroOrden] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [cu, setCu] = useState(0);
+  const [vigas, setVigas] = useState([]);
 
   const agregarViga = () => {
-    if (nuevaViga.nombre && nuevaViga.cantidad && nuevaViga.medidas) {
-      setVigas([...vigas, nuevaViga]);
-      setNuevaViga({ nombre: "", cantidad: "", medidas: "" });
+    // Verificar si tenemos los datos necesarios
+    if (!nombre || !cantidad) {
+      alert("Por favor ingresa nombre y cantidad");
+      return;
     }
+
+    // Crear la cadena de medidas según el modo seleccionado
+    let medidaString = "";
+    if (otra === 0) {
+      // Verificar que tenemos todas las medidas necesarias
+      if (!medidas.cara || !medidas.cuerpo || !medidas.largo) {
+        alert("Por favor completa todas las medidas");
+        return;
+      }
+      medidaString = `${medidas.cara} ${medidas.cara_inches} x ${medidas.cuerpo} ${medidas.cuerpo_inches} x ${medidas.largo}`;
+    } else {
+      // Verificar que tenemos la medida alternativa
+      if (!medidas.otra) {
+        alert("Por favor ingresa la medida");
+        return;
+      }
+      medidaString = medidas.otra;
+    }
+
+    // Crear la nueva viga y agregarla al array
+    const nuevaViga = {
+      nombre,
+      cantidad,
+      medidas: medidaString,
+      cu,
+      tipo,
+    };
+
+    setVigas([...vigas, nuevaViga]);
+    console.log("Nueva Viga:", nuevaViga);
+
+    // Limpiar los campos después de agregar
+    setNombre("");
+    setCantidad("");
+    setTipo("");
+    setCu(0);
+    setMedidas({
+      cara: "",
+      cara_inches: "",
+      cuerpo: "",
+      cuerpo_inches: "",
+      largo: "",
+      otra: "",
+    });
   };
 
   const enviarOrden = () => {
+    if (vigas.length === 0) {
+      alert("Agrega al menos una viga antes de crear la orden");
+      return;
+    }
+
+    if (!numeroOrden) {
+      alert("Por favor ingresa un número de orden");
+      return;
+    }
+
     console.log("Orden Creada:", { numeroOrden, vigas });
+    alert("Orden enviada");
     setNumeroOrden("");
     setVigas([]);
   };
@@ -41,14 +99,12 @@ export default function CrearOrden() {
 
       {/* Input de Número de Orden */}
       <Input
-        onChange={(e) => {
-          setNumeroOrden(e.target.value);
-          console.log("Número de Orden:", numeroOrden);
-        }}
+        onChange={(e) => setNumeroOrden(e.target.value)}
         placeholder="Número de Orden"
         type="number"
         style={"text-center"}
         inputmode={"numeric"}
+        value={numeroOrden}
       />
 
       {/* Agregar Vigas */}
@@ -60,33 +116,42 @@ export default function CrearOrden() {
           <Input
             placeholder="Nombre de la Viga"
             type="text"
-            style={"text-center uppercase"}
-            onChange={(e) => setNuevaViga({ nombre: e.target.value })}
+            style={"text-center uppercase mb-3"}
+            onChange={(e) => setNombre(e.target.value)}
+            value={nombre}
           />
           <Input
+            style={"mb-3 text-center"}
             placeholder="Cantidad"
             type="number"
             inputmode={"numeric"}
-            onChange={(e) => setNuevaViga({ cantidad: e.target.value })}
+            onChange={(e) => setCantidad(e.target.value)}
+            value={cantidad}
           />
         </div>
 
-        {medidas === 0 ? (
+        {otra === 0 ? (
           <>
             <Input
+              style={"mb-3"}
               type="number"
               placeholder="Cara...(Pulgadas)"
               inputmode="numeric"
               onChange={(e) =>
-                setNuevaViga({ medidas: { cara: e.target.value } })
+                setMedidas((pre) => ({ ...pre, cara: e.target.value }))
               }
+              value={medidas.cara}
             />
             <form className="max-w-sm mx-auto">
-              <label htmlFor="underline_select" className="sr-only">
-                Underline select
+              <label htmlFor="cara_inches" className="sr-only">
+                Inches
               </label>
               <select
-                id="underline_select"
+                onChange={(e) =>
+                  setMedidas((pre) => ({ ...pre, cara_inches: e.target.value }))
+                }
+                id="cara_inches"
+                value={medidas.cara_inches}
                 className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
               >
                 <option value=" " defaultValue>
@@ -102,15 +167,31 @@ export default function CrearOrden() {
               </select>
             </form>
 
-            <Input inputMode="numeric" placeholder="Cuerpo..." type="number" />
+            <Input
+              style={"mb-3"}
+              inputMode="numeric"
+              placeholder="Cuerpo..."
+              type="number"
+              onChange={(e) =>
+                setMedidas((pre) => ({ ...pre, cuerpo: e.target.value }))
+              }
+              value={medidas.cuerpo}
+            />
 
             <form className="max-w-sm mx-auto">
-              <label htmlFor="underline_select" className="sr-only">
-                Underline select
+              <label htmlFor="cuerpo_inches" className="sr-only">
+                Inches
               </label>
               <select
-                id="underline_select"
+                id="cuerpo_inches"
+                value={medidas.cuerpo_inches}
                 className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                onChange={(e) =>
+                  setMedidas((pre) => ({
+                    ...pre,
+                    cuerpo_inches: e.target.value,
+                  }))
+                }
               >
                 <option value=" " defaultValue>
                   Inches
@@ -127,31 +208,53 @@ export default function CrearOrden() {
 
             <Input
               placeholder="Largo... (feet)"
+              style={"mb-3"}
               type="number"
               inputmode={"numeric"}
+              onChange={(e) =>
+                setMedidas((pre) => ({ ...pre, largo: e.target.value }))
+              }
+              value={medidas.largo}
             />
           </>
         ) : (
           <Input
+            onChange={(e) =>
+              setMedidas((pre) => ({ ...pre, otra: e.target.value }))
+            }
             placeholder="medida... ejemplo: 3 1/2 x 11 7/8 x 60"
             type={"text"}
             style={"col-span-full"}
+            value={medidas.otra}
           />
         )}
-
+        <Input
+          type={"number"}
+          inputmode={"numeric"}
+          placeholder={"c/u"}
+          style={"col-span-2 text-center"}
+          onChange={(e) => setCu(e.target.value)}
+        />
+        <Input
+          type={"text"}
+          placeholder={"Tipo"}
+          style={"col-span-2 col-start-4 text-center"}
+          onChange={(e) => setTipo(e.target.value)}
+        />
+        <br />
         <div className="flex max-sm:flex-col col-span-full w-full justify-around">
           <Button
             name="Agregar Viga"
             style={"mb-1"}
             bg={"gray"}
-            click={() => console.log(numeroOrden)}
+            click={agregarViga}
           />
 
-          {medidas === 1 ? (
+          {otra === 1 ? (
             <Button
               bg={"gray"}
               name={"⬅️"}
-              click={() => setMedidas(0)}
+              click={() => setOtra(0)}
               style={"mb-1"}
             />
           ) : (
@@ -159,21 +262,38 @@ export default function CrearOrden() {
               style={"mb-1"}
               bg={"gray"}
               name="Otras medidas"
-              click={() => setMedidas(1)}
+              click={() => setOtra(1)}
             />
           )}
 
           {/* Botón para Enviar la Orden */}
-          <Button onClick={() => alert("Orden enviada")} name="Crear Orden" />
+          <Button click={enviarOrden} name="Crear Orden" />
         </div>
         {/* Lista de Vigas Agregadas */}
-        <ul className="mb-4">
-          {vigas.map((viga, index) => (
-            <li key={index} className="p-2 border-b">
-              <strong>{viga.nombre}</strong> - {viga.cantidad} ({viga.medidas})
-            </li>
-          ))}
-        </ul>
+        <table className="mb-4 col-span-full w-full">
+          <thead>
+            <tr className="p-2 border-b ">
+              <th className="text">Name</th>
+              <th className="text">Cantidad</th>
+              <th className="text">Medidas</th>
+              <th className="text">c/u</th>
+              <th className="text">Tipo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vigas.map((viga, index) => (
+              <tr key={index} className="p-2 border-b text-center">
+                <td className="uppercase text-green-500 font-bold">
+                  {viga.nombre}
+                </td>
+                <td className="text">{viga.cantidad}</td>
+                <td className="text">({viga.medidas})</td>
+                <td className="text">{viga.cu === '0' ? "entera" : <p>{viga.cu}/bms</p>}</td>
+                <td className="text">{viga.tipo}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
