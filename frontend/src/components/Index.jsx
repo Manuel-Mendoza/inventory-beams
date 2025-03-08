@@ -8,23 +8,6 @@ import CreateViga from "./CreateVigas";
 
 export default function Inicio() {
   const [view, setView] = useState("index");
-  const [datos, setDatos] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/fecha/")
-      .then((respuesta) => {
-        setDatos(respuesta.data);
-        setCargando(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setCargando(false);
-      });
-  }, []);
-  console.log(datos);
 
   return (
     <div className="p-6">

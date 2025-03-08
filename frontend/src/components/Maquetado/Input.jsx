@@ -6,7 +6,7 @@ const Input = ({ placeholder, type, style, inputmode }) => {
       className={`p-2 border rounded mb-3 w-full ${style}`}
       type={type}
       placeholder={placeholder}
-      inputmode={inputmode}
+      inputMode={inputmode}
     />
   );
 };
