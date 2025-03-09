@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Button from "./Maquetado/Button";
 import Input from "./Maquetado/Input";
 
-export default function SearchBar({ setView,setSearch}) {
+export default function SearchBar({ setView, setSearch }) {
+  const [busqueda, setBusqueda] = useState("");
   return (
     <div className="p-6 flex flex-col items-center">
       <div className="flex w-full justify-around mb-3">
@@ -11,11 +12,12 @@ export default function SearchBar({ setView,setSearch}) {
       </div>
       <div className="flex relative w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         <Input
-          type={"number"}
+          onChange={(e) => setBusqueda(e.target.value)}
+          type={"text"}
           style={"text-center"}
-          placeholder="Search number order..."
-          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search order number..."
         />
+        <button onClick={() => setSearch(busqueda)}>🔎</button>
       </div>
     </div>
   );

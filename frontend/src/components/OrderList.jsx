@@ -18,7 +18,7 @@ export default function OrdenesList({ setView }) {
   }, [search]);
   return (
     <div className="p-4 bg-gray-50 rounded-lg shadow-md">
-      <SearchBar setSearch={setSearch} setView={setView} />
+      <SearchBar setSearch={setSearch} setView={setView} search={search} />
       {orden.length === 0 ? (
         <p className="text-gray-500 text-center">No se encontraron órdenes.</p>
       ) : (
