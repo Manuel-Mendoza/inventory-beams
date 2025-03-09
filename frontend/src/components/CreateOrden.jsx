@@ -169,7 +169,7 @@ export default function CrearOrden() {
 
             <Input
               style={"mb-3"}
-              inputMode="numeric"
+              inputmode="numeric"
               placeholder="Cuerpo..."
               type="number"
               onChange={(e) =>
@@ -232,13 +232,13 @@ export default function CrearOrden() {
           type={"number"}
           inputmode={"numeric"}
           placeholder={"c/u"}
-          style={"col-span-2 text-center"}
+          style={"col-span-2 text-center mb-3"}
           onChange={(e) => setCu(e.target.value)}
         />
         <Input
           type={"text"}
           placeholder={"Tipo"}
-          style={"col-span-2 col-start-4 text-center"}
+          style={"col-span-2 col-start-4 text-center mb-3"}
           onChange={(e) => setTipo(e.target.value)}
         />
         <br />
@@ -246,7 +246,7 @@ export default function CrearOrden() {
           <Button
             name="Agregar Viga"
             style={"mb-1"}
-            bg={"gray"}
+            bg={"blue"}
             click={agregarViga}
           />
 
@@ -273,23 +273,25 @@ export default function CrearOrden() {
         <table className="mb-4 col-span-full w-full">
           <thead>
             <tr className="p-2 border-b ">
-              <th className="text">Name</th>
-              <th className="text">Cantidad</th>
-              <th className="text">Medidas</th>
-              <th className="text">c/u</th>
-              <th className="text">Tipo</th>
+              <th className="text">Bms</th>
+              <th className="text">Qty</th>
+              <th className="text">Size</th>
+              <th className="text">Each</th>
+              <th className="text">DF/YC</th>
             </tr>
           </thead>
           <tbody>
             {vigas.map((viga, index) => (
-              <tr key={index} className="p-2 border-b text-center">
+              <tr key={index} className="p-2 border-b text-center text-sm">
                 <td className="uppercase text-green-500 font-bold">
                   {viga.nombre}
                 </td>
                 <td className="text">{viga.cantidad}</td>
                 <td className="text">({viga.medidas})</td>
-                <td className="text">{viga.cu === '0' ? "entera" : <p>{viga.cu}/bms</p>}</td>
-                <td className="text">{viga.tipo}</td>
+                <td className="text">
+                  {viga.cu === "0" ? "entera" : <p>{viga.cu}/bms</p>}
+                </td>
+                <td className="text uppercase">{viga.tipo}</td>
               </tr>
             ))}
           </tbody>

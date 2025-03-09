@@ -6,14 +6,14 @@ export default function ListadoBase({orden}) {
       {orden.map((data, index) => (
         <div
           key={index}
-          className="border border-gray-300 p-4 rounded-lg bg-white"
+          className="border border-gray-300 p-2 rounded-lg bg-white"
         >
           <h2 className="text-lg font-bold text-blue-600">{data.fecha}</h2>
           <div className="ml-4 mt-2">
             <h3 className="text-md font-semibold text-gray-800">
               Orden: {data.numero_orden}
             </h3>
-            <ul className="ml-4 mt-1 list-disc text-gray-700">
+            <ul className="ml-2 mt-1 list-disc text-gray-700">
               {data.vigas.map((viga, j) => (
                 <li key={j}>
                   <strong>{viga.nombre}</strong> = {viga.cantidad}{" "}

@@ -12,12 +12,17 @@ export default function OrdenesList({ setView }) {
     api
       .get(`ordenes/${search}`)
       .then((response) => {
-        setOrden(response.data);
+        // Asegurarse de que siempre trabajamos con un array
+        const data = response.data;
+        // Si la respuesta es un objeto único, convertirlo en un array
+        const ordenesArray = Array.isArray(data) ? data : [data];
+        setOrden(ordenesArray);
       })
       .catch((error) => {
         console.error("Error al obtener las órdenes:", error);
       });
   }, [search]);
+
   return (
     <div className="p-4 bg-gray-50 rounded-lg shadow-md">
       <SearchBar setSearch={setSearch} setView={setView} search={search} />
