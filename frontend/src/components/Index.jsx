@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import Letter from "./Letter";
 import SearchBar from "./SearchBar";
 import OrderList from "./OrderList";
@@ -14,10 +13,7 @@ export default function Inicio() {
       <Letter setView={setView} view={view} />
       <hr />
       {view === "index" ? (
-        <>
-          <SearchBar setView={setView} />
-          <OrderList />
-        </>
+          <OrderList setView={setView} />
       ) : view === "orden" ? (
         <CreateOrder />
       ) : view === "viga" ? (
