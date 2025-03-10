@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Input from "./Maquetado/Input";
 import Button from "./Maquetado/Button";
+import { useApiContext } from "../context/ApiContext";
 
 export default function CrearOrden() {
   const fechaActual = new Date();
   const fechaFormateada = fechaActual.toISOString().split("T")[0]; // Formato YYYY-MM-DD
-
+  const { createOrden } = useApiContext();
   const [medidas, setMedidas] = useState({
     cara: "",
     cara_inches: "",
@@ -71,6 +72,8 @@ export default function CrearOrden() {
       cuerpo: "",
       cuerpo_inches: "",
       largo: "",
+      cu: 0,
+      tipo: "",
       otra: "",
     });
   };
@@ -87,6 +90,7 @@ export default function CrearOrden() {
     }
 
     console.log("Orden Creada:", { date, numeroOrden, vigas });
+    createOrden({ date, numeroOrden, vigas });
     alert("Orden enviada");
     setNumeroOrden("");
     setVigas([]);
@@ -243,15 +247,17 @@ export default function CrearOrden() {
           />
         )}
         <Input
+          value={cu}
+          placeholder={"c/u"}
           type={"number"}
           inputmode={"numeric"}
-          placeholder={"c/u"}
           style={"col-span-2 text-center mb-3"}
           onChange={(e) => setCu(e.target.value)}
         />
         <Input
-          type={"text"}
+          value={tipo}
           placeholder={"Tipo"}
+          type={"text"}
           style={"col-span-2 col-start-4 text-center mb-3"}
           onChange={(e) => setTipo(e.target.value)}
         />
