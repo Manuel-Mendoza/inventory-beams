@@ -3,6 +3,9 @@ import Input from "./Maquetado/Input";
 import Button from "./Maquetado/Button";
 
 export default function CrearOrden() {
+  const fechaActual = new Date();
+  const fechaFormateada = fechaActual.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+
   const [medidas, setMedidas] = useState({
     cara: "",
     cara_inches: "",
@@ -18,6 +21,7 @@ export default function CrearOrden() {
   const [tipo, setTipo] = useState("");
   const [cu, setCu] = useState(0);
   const [vigas, setVigas] = useState([]);
+  const [date, setDate] = useState(fechaFormateada);
 
   const agregarViga = () => {
     // Verificar si tenemos los datos necesarios
@@ -82,7 +86,7 @@ export default function CrearOrden() {
       return;
     }
 
-    console.log("Orden Creada:", { numeroOrden, vigas });
+    console.log("Orden Creada:", { date, numeroOrden, vigas });
     alert("Orden enviada");
     setNumeroOrden("");
     setVigas([]);
@@ -96,16 +100,26 @@ export default function CrearOrden() {
       <h2 className="text-xl font-bold mb-4 grid text-center">
         Crear Nueva Orden
       </h2>
+      <div className="flex justify-around w-full">
+        {/* Input de Fecha */}
+        <Input
+          placeholder="Fecha"
+          type="date"
+          style={"text-center"}
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
 
-      {/* Input de Número de Orden */}
-      <Input
-        onChange={(e) => setNumeroOrden(e.target.value)}
-        placeholder="Número de Orden"
-        type="number"
-        style={"text-center"}
-        inputmode={"numeric"}
-        value={numeroOrden}
-      />
+        {/* Input de Número de Orden */}
+        <Input
+          onChange={(e) => setNumeroOrden(e.target.value)}
+          placeholder="Número de Orden"
+          type="number"
+          style={"text-center"}
+          inputmode={"numeric"}
+          value={numeroOrden}
+        />
+      </div>
 
       {/* Agregar Vigas */}
       <div className="mb-4 min-md:grid justify-items-center grid-cols-5 gap-1">
