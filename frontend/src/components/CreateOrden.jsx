@@ -269,6 +269,7 @@ export default function CrearOrden() {
           {/* Botón para Enviar la Orden */}
           <Button click={enviarOrden} name="Crear Orden" />
         </div>
+        <hr />
         {/* Lista de Vigas Agregadas */}
         <table className="mb-4 col-span-full w-full">
           <thead>
