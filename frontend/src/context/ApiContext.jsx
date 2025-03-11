@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 
 // Crear el contexto
-const API_BASE = "http://192.168.254.60:8000/api/";
+const API_BASE = "vigas-app-joseguns2-manuel-mendozas-projects-35b9b073.vercel.app/api/";
 const ApiContext = createContext();
 
 // Hook personalizado para usar el contexto
