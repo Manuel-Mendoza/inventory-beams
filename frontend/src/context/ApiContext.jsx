@@ -42,14 +42,13 @@ export const ApiProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await api.post("ordenes/", ordenData);
-      // Actualizar la lista de órdenes después de crear una nueva
-      await fetchOrdenes();
+      await fetchOrdenes(); // Actualizar la lista después de crear
       setError(false);
       return response.data;
     } catch (err) {
       setError(true);
-      console.error("Error al crear la orden:", err);
-      throw err;
+      const errorMessage = err.response?.data?.error || 'Error al crear la orden';
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }

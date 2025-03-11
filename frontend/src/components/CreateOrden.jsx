@@ -78,22 +78,42 @@ export default function CrearOrden() {
     });
   };
 
-  const enviarOrden = () => {
+  const enviarOrden = async () => {
     if (vigas.length === 0) {
       alert("Agrega al menos una viga antes de crear la orden");
       return;
     }
-
+  
     if (!numeroOrden) {
       alert("Por favor ingresa un número de orden");
       return;
     }
-
-    console.log("Orden Creada:", { date, numeroOrden, vigas });
-    createOrden({ date, numeroOrden, vigas });
-    alert("Orden enviada");
-    setNumeroOrden("");
-    setVigas([]);
+  
+    try {
+      // Crear el objeto de orden con el formato correcto
+      const ordenData = {
+        numero_orden: numeroOrden,
+        fecha: date,
+        vigas: vigas.map(viga => ({
+          nombre: viga.nombre,
+          cantidad: parseInt(viga.cantidad),
+          medidas: viga.medidas,
+          cada_una: viga.cu.toString(), // Convertir a string como espera el modelo
+          tipo: viga.tipo
+        }))
+      };
+  
+      await createOrden(ordenData);
+      alert("Orden creada exitosamente");
+  
+      // Limpiar el formulario
+      setNumeroOrden("");
+      setVigas([]);
+      setDate(fechaFormateada);
+    } catch (error) {
+      alert("Error al crear la orden: " + error.message);
+      console.error("Error detallado:", error);
+    }
   };
 
   return (
