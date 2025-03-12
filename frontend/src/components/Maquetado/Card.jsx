@@ -14,20 +14,29 @@ export default function Card({ orden }) {
   };
 
   // Función para manejar la eliminación
-  const handleDelete = async (e, ordenId) => {
+  const handleDelete = async (e, index) => {
     e.stopPropagation();
+    
+    // Obtener la orden actual basada en el índice
+    const currentOrden = orden[index];
+    
+    console.log("Intentando eliminar orden:", currentOrden);
 
-    if (confirmDelete === ordenId) {
+    if (confirmDelete === index) {
       try {
-        await deleteOrden(ordenId);
+        console.log("Confirmación recibida, procediendo a eliminar");
+        // Pasamos el objeto completo de la orden para tener acceso a todos sus datos
+        await deleteOrden(currentOrden);
+        console.log("Orden eliminada exitosamente");
         setConfirmDelete(null);
         setToggler(null);
       } catch (error) {
         console.error("Error al eliminar la orden:", error);
-        // Aquí podrías mostrar un mensaje de error al usuario
+        alert("Error al eliminar la orden: " + error.message);
       }
     } else {
-      setConfirmDelete(ordenId);
+      console.log("Primera pulsación, solicitando confirmación");
+      setConfirmDelete(index);
     }
   };
 
@@ -35,7 +44,6 @@ export default function Card({ orden }) {
     <div className="space-y-4">
       {orden.map((data, index) => (
         <div
-          id={index}
           key={index}
           className="border border-gray-300 p-2 rounded-lg bg-white"
         >
@@ -70,7 +78,7 @@ export default function Card({ orden }) {
           {toggler === index && (
             <div className="toggle-content mt-3 p-3 bg-gray-50 rounded-md grid grid-cols-2 justify-items-center">
               <Button
-              style={'!w-full mr-1'}
+                style={'!w-full mr-1'}
                 bg={"gray"}
                 name="editar"
                 click={(e) => {
@@ -79,13 +87,17 @@ export default function Card({ orden }) {
                 }}
               />
               <Button
-              style={'!w-full ml-1'}
-                bg={confirmDelete === data._id ? "yellow" : "red"}
-                name={confirmDelete === data._id ? "confirmar" : "eliminar"}
-                click={(e) => handleDelete(e, data._id)}
+                style={'!w-full ml-1'}
+                bg={confirmDelete === index ? "yellow" : "red"}
+                name={confirmDelete === index ? "confirmar" : "eliminar"}
+                id={`delete-${index}`}
+                click={(e) => {
+                  e.stopPropagation();
+                  handleDelete(e, index);
+                }}
               />
               {/* Mensaje de confirmación */}
-              {confirmDelete === data._id && (
+              {confirmDelete === index && (
                 <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded text-center col-span-2">
                   ¿Estás seguro de eliminar esta orden? Haz clic en "confirmar"
                   para eliminar.
