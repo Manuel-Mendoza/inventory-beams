@@ -9,17 +9,14 @@ export default function Card({ orden }) {
 
   // Función para manejar el toggle
   const handleToggle = (index) => {
-    // Si el elemento clickeado ya está abierto, lo cerramos
-    // Si no, abrimos el elemento clickeado
     setToggler(toggler === index ? null : index);
-    // Resetear el estado de confirmación al cambiar de orden
     setConfirmDelete(null);
   };
 
   // Función para manejar la eliminación
   const handleDelete = async (e, ordenId) => {
     e.stopPropagation();
-    
+
     if (confirmDelete === ordenId) {
       try {
         await deleteOrden(ordenId);
@@ -71,27 +68,29 @@ export default function Card({ orden }) {
 
           {/* Contenido que se muestra/oculta */}
           {toggler === index && (
-            <div className="toggle-content mt-3 p-3 bg-gray-50 rounded-md flex justify-around">
+            <div className="toggle-content mt-3 p-3 bg-gray-50 rounded-md grid grid-cols-2 justify-items-center">
               <Button
+              style={'!w-full mr-1'}
                 bg={"gray"}
                 name="editar"
-                onClick={(e) => {
+                click={(e) => {
                   e.stopPropagation();
                   // Aquí iría la lógica para editar
                 }}
               />
               <Button
+              style={'!w-full ml-1'}
                 bg={confirmDelete === data._id ? "yellow" : "red"}
                 name={confirmDelete === data._id ? "confirmar" : "eliminar"}
-                onClick={(e) => handleDelete(e, data._id)}
+                click={(e) => handleDelete(e, data._id)}
               />
-            </div>
-          )}
-          
-          {/* Mensaje de confirmación */}
-          {confirmDelete === data._id && (
-            <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded text-center">
-              ¿Estás seguro de eliminar esta orden? Haz clic en "confirmar" para eliminar.
+              {/* Mensaje de confirmación */}
+              {confirmDelete === data._id && (
+                <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded text-center col-span-2">
+                  ¿Estás seguro de eliminar esta orden? Haz clic en "confirmar"
+                  para eliminar.
+                </div>
+              )}
             </div>
           )}
         </div>
