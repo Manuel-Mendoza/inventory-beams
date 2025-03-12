@@ -72,7 +72,7 @@ export const ApiProvider = ({ children }) => {
         throw new Error(errorMessage);
       } finally {
         setLoading(false);
-        await fetchOrdenes(); // Actualizar la lista después de eliminar
+        fetchOrdenes(); // Actualizar la lista después de eliminar
     }
   };
 
