@@ -62,7 +62,6 @@ export const ApiProvider = ({ children }) => {
     setLoading(true);
     try {
       await api.delete(`ordenes/${ordenId}`);
-      await fetchOrdenes(); // Actualizar la lista después de eliminar
       setError(false);
       return true;
     } catch (err) {
@@ -70,9 +69,10 @@ export const ApiProvider = ({ children }) => {
       console.error("Error al eliminar la orden:", err);
       const errorMessage =
         err.response?.data?.error || "Error al eliminar la orden";
-      throw new Error(errorMessage);
-    } finally {
-      setLoading(false);
+        throw new Error(errorMessage);
+      } finally {
+        setLoading(false);
+        await fetchOrdenes(); // Actualizar la lista después de eliminar
     }
   };
 
