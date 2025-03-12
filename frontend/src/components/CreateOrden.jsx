@@ -5,7 +5,10 @@ import { useApiContext } from "../context/ApiContext";
 
 export default function CrearOrden() {
   const fechaActual = new Date();
-  const fechaFormateada = fechaActual.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+  const año = fechaActual.getFullYear();
+  const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+  const dia = String(fechaActual.getDate()).padStart(2, '0');
+  const fechaFormateada = `${año}-${mes}-${dia}`; // Formato YYYY-MM-DD
   const { createOrden } = useApiContext();
   const [medidas, setMedidas] = useState({
     cara: "",
