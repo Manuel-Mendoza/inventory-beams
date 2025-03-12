@@ -3,6 +3,7 @@ import axios from "axios";
 
 // Crear el contexto
 const API_BASE = "https://vigasapp-production.up.railway.app/api/";
+const API_Desarrolo = "https://localhost:8000/api/";
 const ApiContext = createContext();
 
 // Hook personalizado para usar el contexto
@@ -37,6 +38,7 @@ export const ApiProvider = ({ children }) => {
       setLoading(false);
     }
   };
+
   // Función para crear una nueva orden
   const createOrden = async (ordenData) => {
     setLoading(true);
@@ -47,7 +49,27 @@ export const ApiProvider = ({ children }) => {
       return response.data;
     } catch (err) {
       setError(true);
-      const errorMessage = err.response?.data?.error || 'Error al crear la orden';
+      const errorMessage =
+        err.response?.data?.error || "Error al crear la orden";
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Función para eliminar una orden
+  const deleteOrden = async (ordenId) => {
+    setLoading(true);
+    try {
+      await api.delete(`ordenes/${ordenId}`);
+      await fetchOrdenes(); // Actualizar la lista después de eliminar
+      setError(false);
+      return true;
+    } catch (err) {
+      setError(true);
+      console.error("Error al eliminar la orden:", err);
+      const errorMessage =
+        err.response?.data?.error || "Error al eliminar la orden";
       throw new Error(errorMessage);
     } finally {
       setLoading(false);
@@ -67,6 +89,7 @@ export const ApiProvider = ({ children }) => {
     setError,
     fetchOrdenes,
     createOrden,
+    deleteOrden,
   };
 
   return (

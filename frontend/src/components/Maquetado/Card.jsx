@@ -1,14 +1,37 @@
 import React, { useState } from "react";
 import Button from "./Button";
+import { useApiContext } from "../../context/ApiContext";
 
 export default function Card({ orden }) {
   const [toggler, setToggler] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
+  const { deleteOrden } = useApiContext();
 
   // Función para manejar el toggle
   const handleToggle = (index) => {
     // Si el elemento clickeado ya está abierto, lo cerramos
     // Si no, abrimos el elemento clickeado
     setToggler(toggler === index ? null : index);
+    // Resetear el estado de confirmación al cambiar de orden
+    setConfirmDelete(null);
+  };
+
+  // Función para manejar la eliminación
+  const handleDelete = async (e, ordenId) => {
+    e.stopPropagation();
+    
+    if (confirmDelete === ordenId) {
+      try {
+        await deleteOrden(ordenId);
+        setConfirmDelete(null);
+        setToggler(null);
+      } catch (error) {
+        console.error("Error al eliminar la orden:", error);
+        // Aquí podrías mostrar un mensaje de error al usuario
+      }
+    } else {
+      setConfirmDelete(ordenId);
+    }
   };
 
   return (
@@ -54,15 +77,21 @@ export default function Card({ orden }) {
                 name="editar"
                 onClick={(e) => {
                   e.stopPropagation();
+                  // Aquí iría la lógica para editar
                 }}
               />
               <Button
-                bg={"red"}
-                name="eliminar"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
+                bg={confirmDelete === data._id ? "yellow" : "red"}
+                name={confirmDelete === data._id ? "confirmar" : "eliminar"}
+                onClick={(e) => handleDelete(e, data._id)}
               />
+            </div>
+          )}
+          
+          {/* Mensaje de confirmación */}
+          {confirmDelete === data._id && (
+            <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded text-center">
+              ¿Estás seguro de eliminar esta orden? Haz clic en "confirmar" para eliminar.
             </div>
           )}
         </div>
