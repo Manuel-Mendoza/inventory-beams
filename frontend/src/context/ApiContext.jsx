@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-
+import Cargando from '../components/Vistas/Loading';
 // Crear el contexto
 const API_BASE = "https://vigasapp-production.up.railway.app/api/";
 const API_LOCAL = "http://localhost:8000/api/";  // Corregido el protocolo de http a https
@@ -11,7 +11,7 @@ export const useApiContext = () => useContext(ApiContext);
 
 // Crear la instancia de axios
 const api = axios.create({
-  baseURL: API_BASE, // Cambiado a API_BASE para producción
+  baseURL: API_LOCAL, // Cambiado a API_BASE para producción
   headers: {
     "Content-Type": "application/json",
   },
@@ -43,14 +43,18 @@ export const ApiProvider = ({ children }) => {
   const createOrden = async (ordenData) => {
     setLoading(true);
     try {
+      console.log("Enviando datos a la API:", JSON.stringify(ordenData, null, 2));
       const response = await api.post("ordenes/", ordenData);
       await fetchOrdenes(); // Actualizar la lista después de crear
       setError(false);
       return response.data;
     } catch (err) {
       setError(true);
+      console.error("Error completo:", err);
       const errorMessage =
-        err.response?.data?.error || "Error al crear la orden";
+        err.response?.data?.error || 
+        JSON.stringify(err.response?.data) || 
+        "Error al crear la orden";
       throw new Error(errorMessage);
     } finally {
       setLoading(false);

@@ -56,7 +56,7 @@ frontend/
 1. Clone the repository
 ```bash
 git clone <repository-url>
-cd inventory-beams
+cd inventory-beams/frontend
 ```
 
 2. Install dependencies
@@ -122,6 +122,33 @@ The application uses a custom component library for consistent styling:
 - `Input`: Form input fields
 - `Loading`: Loading indicator
 - `ListadoBase`: Base component for listing items
+
+## 🔧 Development
+
+### Adding New Features
+
+1. Create new components in the appropriate directory
+2. Update the context if needed for new API functionality
+3. Import and use the components in the main application
+
+### Styling
+
+The application uses Tailwind CSS for styling. To modify the styling:
+
+1. Edit the `tailwind.config.js` file for global theme changes
+2. Use Tailwind classes directly in components
+3. Add custom styles in `src/styles/global.css` if needed
+
+## 🚀 Deployment
+
+This application can be deployed on any static hosting service:
+
+1. Build the application
+```bash
+pnpm build
+```
+
+2. Deploy the `dist` directory to your hosting service
 
 ## 📄 License
 

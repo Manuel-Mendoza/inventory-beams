@@ -4,7 +4,6 @@ import { ApiProvider } from "../context/ApiContext";
 import Letter from "./Letter";
 import OrderList from "./OrderList";
 import CreateOrder from "./CreateOrden";
-import CreateViga from "./CreateVigas";
 
 export default function Inicio() {
   const [view, setView] = useState("index");
@@ -18,8 +17,6 @@ export default function Inicio() {
           <OrderList setView={setView} />
         ) : view === "orden" ? (
           <CreateOrder />
-        ) : view === "viga" ? (
-          <CreateViga />
         ) : null}
       </div>
     </ApiProvider>
