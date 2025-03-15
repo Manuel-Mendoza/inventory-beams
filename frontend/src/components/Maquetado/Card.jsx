@@ -16,10 +16,10 @@ export default function Card({ orden }) {
   // Function to handle deletion
   const handleDelete = async (e, index) => {
     e.stopPropagation();
-    
+
     // Get the current order based on the index
     const currentOrden = orden[index];
-    
+
     console.log("Trying to delete order:", currentOrden);
 
     if (confirmDelete === index) {
@@ -48,7 +48,8 @@ export default function Card({ orden }) {
           className="border border-gray-300 p-2 rounded-lg bg-white"
         >
           {/* Clickable header to toggle */}
-          <div onClick={() => handleToggle(index)} className="cursor-pointer">
+          {/* <div onClick={() => handleToggle(index)} className="cursor-pointer"> */}
+          <div className="cursor-pointer">
             <h2 className="text-lg font-bold text-blue-600">{data.fecha}</h2>
             <div className="ml-4 mt-2">
               <h3 className="text-md font-semibold text-gray-800">
@@ -57,6 +58,7 @@ export default function Card({ orden }) {
               <ul className="ml-2 mt-1 list-disc text-gray-700">
                 {data.vigas.map((viga, j) => (
                   <li key={j}>
+                    <input onChange={(e)=> console.log(e.target.checked)} type="checkbox" name="ready" id="ready" />{" "}
                     <strong className="uppercase">{viga.nombre}</strong> ={" "}
                     {viga.cantidad}{" "}
                     <span className="text-gray-500 italic">
@@ -78,7 +80,7 @@ export default function Card({ orden }) {
           {toggler === index && (
             <div className="toggle-content mt-3 p-3 bg-gray-50 rounded-md grid grid-cols-2 justify-items-center">
               <Button
-                style={'!w-full mr-1'}
+                style={"!w-full mr-1"}
                 bg={"gray"}
                 name="edit"
                 click={(e) => {
@@ -87,7 +89,7 @@ export default function Card({ orden }) {
                 }}
               />
               <Button
-                style={'!w-full ml-1'}
+                style={"!w-full ml-1"}
                 bg={confirmDelete === index ? "yellow" : "red"}
                 name={confirmDelete === index ? "confirm" : "delete"}
                 id={`delete-${index}`}
@@ -99,7 +101,8 @@ export default function Card({ orden }) {
               {/* Confirmation message */}
               {confirmDelete === index && (
                 <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded text-center col-span-2">
-                  Are you sure you want to delete this order? Click "confirm" to delete.
+                  Are you sure you want to delete this order? Click "confirm" to
+                  delete.
                 </div>
               )}
             </div>
