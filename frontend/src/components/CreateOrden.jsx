@@ -155,7 +155,7 @@ export default function CrearOrden() {
         </h3>
         <div className="col-span-full">
           <Input
-            placeholder="Beam Name"
+            placeholder="Beam number"
             type="text"
             style={"text-center uppercase mb-3"}
             onChange={(e) => setNombre(e.target.value)}
