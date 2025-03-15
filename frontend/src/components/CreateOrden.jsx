@@ -6,8 +6,8 @@ import { useApiContext } from "../context/ApiContext";
 export default function CrearOrden() {
   const fechaActual = new Date();
   const año = fechaActual.getFullYear();
-  const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
-  const dia = String(fechaActual.getDate()).padStart(2, '0');
+  const mes = String(fechaActual.getMonth() + 1).padStart(2, "0");
+  const dia = String(fechaActual.getDate()).padStart(2, "0");
   const fechaFormateada = `${año}-${mes}-${dia}`; // Format YYYY-MM-DD
   const { createOrden } = useApiContext();
   const [medidas, setMedidas] = useState({
@@ -22,7 +22,7 @@ export default function CrearOrden() {
   const [nombre, setNombre] = useState("");
   const [cantidad, setCantidad] = useState("");
   const [numeroOrden, setNumeroOrden] = useState("");
-  const [tipo, setTipo] = useState("");
+  const [tipo, setTipo] = useState("DF");
   const [cu, setCu] = useState(0);
   const [vigas, setVigas] = useState([]);
   const [date, setDate] = useState(fechaFormateada);
@@ -67,7 +67,6 @@ export default function CrearOrden() {
     // Clear fields after adding
     setNombre("");
     setCantidad("");
-    setTipo("");
     setCu(0);
     setMedidas({
       cara: "",
@@ -76,7 +75,6 @@ export default function CrearOrden() {
       cuerpo_inches: "",
       largo: "",
       cu: 0,
-      tipo: "",
       otra: "",
     });
   };
@@ -86,29 +84,29 @@ export default function CrearOrden() {
       alert("Add at least one beam before creating the order");
       return;
     }
-  
+
     if (!numeroOrden) {
       alert("Please enter an order number");
       return;
     }
-  
+
     try {
       // Create the order object with the correct format
       const ordenData = {
         numero_orden: numeroOrden,
         fecha: date,
-        vigas: vigas.map(viga => ({
+        vigas: vigas.map((viga) => ({
           nombre: viga.nombre,
           cantidad: parseInt(viga.cantidad),
           medidas: viga.medidas,
           cada_una: viga.cu.toString(), // Convert to string as expected by the model
-          tipo: viga.tipo
-        }))
+          tipo: viga.tipo,
+        })),
       };
-  
+
       await createOrden(ordenData);
       alert("Order created successfully");
-  
+
       // Clear the form
       setNumeroOrden("");
       setVigas([]);
@@ -277,13 +275,17 @@ export default function CrearOrden() {
           style={"col-span-2 text-center mb-3"}
           onChange={(e) => setCu(e.target.value)}
         />
-        <Input
+        <select
+          id="cara_inches"
           value={tipo}
-          placeholder={"Type"}
-          type={"text"}
-          style={"col-span-2 col-start-4 text-center mb-3"}
+          className="col-span-2 col-start-4 text-center w-full border rounded outline-0"
           onChange={(e) => setTipo(e.target.value)}
-        />
+        >
+          <option defaultValue value="DF">
+            DF
+          </option>
+          <option value="YC">YC</option>
+        </select>
         <br />
         <div className="flex max-sm:flex-col col-span-full w-full justify-around">
           <Button
@@ -333,7 +335,13 @@ export default function CrearOrden() {
                 <td className="text">{viga.cantidad}</td>
                 <td className="text">({viga.medidas})</td>
                 <td className="text">
-                  {viga.cu === "0" ? "whole" : <p>{viga.cu}/bms</p>}
+                  {viga.cu === 0 ? (
+                    "whole"
+                  ) : viga.cu === "1" ? (
+                    "whole"
+                  ) : (
+                    <p>{viga.cu}/bms</p>
+                  )}
                 </td>
                 <td className="text uppercase">{viga.tipo}</td>
               </tr>
