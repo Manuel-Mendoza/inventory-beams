@@ -20,7 +20,7 @@ export default function OrdenesList({ setView }) {
       {error ? (
         <div className="flex">
           <strong className="text-center w-full">
-            No se encontraron ordenes
+            No orders found
           </strong>
         </div>
       ) : search === "" ? (

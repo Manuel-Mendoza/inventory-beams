@@ -8,7 +8,7 @@ export default function CrearOrden() {
   const año = fechaActual.getFullYear();
   const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
   const dia = String(fechaActual.getDate()).padStart(2, '0');
-  const fechaFormateada = `${año}-${mes}-${dia}`; // Formato YYYY-MM-DD
+  const fechaFormateada = `${año}-${mes}-${dia}`; // Format YYYY-MM-DD
   const { createOrden } = useApiContext();
   const [medidas, setMedidas] = useState({
     cara: "",
@@ -28,31 +28,31 @@ export default function CrearOrden() {
   const [date, setDate] = useState(fechaFormateada);
 
   const agregarViga = () => {
-    // Verificar si tenemos los datos necesarios
+    // Check if we have the necessary data
     if (!nombre || !cantidad) {
-      alert("Por favor ingresa nombre y cantidad");
+      alert("Please enter name and quantity");
       return;
     }
 
-    // Crear la cadena de medidas según el modo seleccionado
+    // Create the measurement string according to the selected mode
     let medidaString = "";
     if (otra === 0) {
-      // Verificar que tenemos todas las medidas necesarias
+      // Check that we have all the necessary measurements
       if (!medidas.cara || !medidas.cuerpo || !medidas.largo) {
-        alert("Por favor completa todas las medidas");
+        alert("Please complete all measurements");
         return;
       }
       medidaString = `${medidas.cara} ${medidas.cara_inches} x ${medidas.cuerpo} ${medidas.cuerpo_inches} x ${medidas.largo}`;
     } else {
-      // Verificar que tenemos la medida alternativa
+      // Check that we have the alternative measurement
       if (!medidas.otra) {
-        alert("Por favor ingresa la medida");
+        alert("Please enter the measurement");
         return;
       }
       medidaString = medidas.otra;
     }
 
-    // Crear la nueva viga y agregarla al array
+    // Create the new beam and add it to the array
     const nuevaViga = {
       nombre,
       cantidad,
@@ -62,9 +62,9 @@ export default function CrearOrden() {
     };
 
     setVigas([...vigas, nuevaViga]);
-    console.log("Nueva Viga:", nuevaViga);
+    console.log("New Beam:", nuevaViga);
 
-    // Limpiar los campos después de agregar
+    // Clear fields after adding
     setNombre("");
     setCantidad("");
     setTipo("");
@@ -83,17 +83,17 @@ export default function CrearOrden() {
 
   const enviarOrden = async () => {
     if (vigas.length === 0) {
-      alert("Agrega al menos una viga antes de crear la orden");
+      alert("Add at least one beam before creating the order");
       return;
     }
   
     if (!numeroOrden) {
-      alert("Por favor ingresa un número de orden");
+      alert("Please enter an order number");
       return;
     }
   
     try {
-      // Crear el objeto de orden con el formato correcto
+      // Create the order object with the correct format
       const ordenData = {
         numero_orden: numeroOrden,
         fecha: date,
@@ -101,21 +101,21 @@ export default function CrearOrden() {
           nombre: viga.nombre,
           cantidad: parseInt(viga.cantidad),
           medidas: viga.medidas,
-          cada_una: viga.cu.toString(), // Convertir a string como espera el modelo
+          cada_una: viga.cu.toString(), // Convert to string as expected by the model
           tipo: viga.tipo
         }))
       };
   
       await createOrden(ordenData);
-      alert("Orden creada exitosamente");
+      alert("Order created successfully");
   
-      // Limpiar el formulario
+      // Clear the form
       setNumeroOrden("");
       setVigas([]);
       setDate(fechaFormateada);
     } catch (error) {
-      alert("Error al crear la orden: " + error.message);
-      console.error("Error detallado:", error);
+      alert("Error creating order: " + error.message);
+      console.error("Detailed error:", error);
     }
   };
 
@@ -125,22 +125,22 @@ export default function CrearOrden() {
       className="p-6 bg-white shadow-md rounded-lg grid justify-center justify-items-center"
     >
       <h2 className="text-xl font-bold mb-4 grid text-center">
-        Crear Nueva Orden
+        Create New Order
       </h2>
       <div className="flex justify-around w-full">
-        {/* Input de Fecha */}
+        {/* Date Input */}
         <Input
-          placeholder="Fecha"
+          placeholder="Date"
           type="date"
           style={"text-center"}
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
 
-        {/* Input de Número de Orden */}
+        {/* Order Number Input */}
         <Input
           onChange={(e) => setNumeroOrden(e.target.value)}
-          placeholder="Número de Orden"
+          placeholder="Order Number"
           type="number"
           style={"text-center"}
           inputmode={"numeric"}
@@ -148,14 +148,14 @@ export default function CrearOrden() {
         />
       </div>
 
-      {/* Agregar Vigas */}
+      {/* Add Beams */}
       <div className="mb-4 min-md:grid justify-items-center grid-cols-5 gap-1">
         <h3 className="text-lg font-semibold col-span-5 text-center">
-          Agregar Viga
+          Add Beam
         </h3>
         <div className="col-span-full">
           <Input
-            placeholder="Nombre de la Viga"
+            placeholder="Beam Name"
             type="text"
             style={"text-center uppercase mb-3"}
             onChange={(e) => setNombre(e.target.value)}
@@ -163,7 +163,7 @@ export default function CrearOrden() {
           />
           <Input
             style={"mb-3 text-center"}
-            placeholder="Cantidad"
+            placeholder="Quantity"
             type="number"
             inputmode={"numeric"}
             onChange={(e) => setCantidad(e.target.value)}
@@ -176,7 +176,7 @@ export default function CrearOrden() {
             <Input
               style={"mb-3"}
               type="number"
-              placeholder="Cara...(Pulgadas)"
+              placeholder="Face...(Inches)"
               inputmode="numeric"
               onChange={(e) =>
                 setMedidas((pre) => ({ ...pre, cara: e.target.value }))
@@ -211,7 +211,7 @@ export default function CrearOrden() {
             <Input
               style={"mb-3"}
               inputmode="numeric"
-              placeholder="Cuerpo..."
+              placeholder="Body..."
               type="number"
               onChange={(e) =>
                 setMedidas((pre) => ({ ...pre, cuerpo: e.target.value }))
@@ -248,7 +248,7 @@ export default function CrearOrden() {
             </form>
 
             <Input
-              placeholder="Largo... (feet)"
+              placeholder="Length... (feet)"
               style={"mb-3"}
               type="number"
               inputmode={"numeric"}
@@ -263,7 +263,7 @@ export default function CrearOrden() {
             onChange={(e) =>
               setMedidas((pre) => ({ ...pre, otra: e.target.value }))
             }
-            placeholder="medida... ejemplo: 3 1/2 x 11 7/8 x 60"
+            placeholder="measurement... example: 3 1/2 x 11 7/8 x 60"
             type={"text"}
             style={"col-span-full"}
             value={medidas.otra}
@@ -271,7 +271,7 @@ export default function CrearOrden() {
         )}
         <Input
           value={cu}
-          placeholder={"c/u"}
+          placeholder={"each"}
           type={"number"}
           inputmode={"numeric"}
           style={"col-span-2 text-center mb-3"}
@@ -279,7 +279,7 @@ export default function CrearOrden() {
         />
         <Input
           value={tipo}
-          placeholder={"Tipo"}
+          placeholder={"Type"}
           type={"text"}
           style={"col-span-2 col-start-4 text-center mb-3"}
           onChange={(e) => setTipo(e.target.value)}
@@ -287,7 +287,7 @@ export default function CrearOrden() {
         <br />
         <div className="flex max-sm:flex-col col-span-full w-full justify-around">
           <Button
-            name="Agregar Viga"
+            name="Add Beam"
             style={"mb-1"}
             bg={"blue"}
             click={agregarViga}
@@ -304,16 +304,16 @@ export default function CrearOrden() {
             <Button
               style={"mb-1"}
               bg={"gray"}
-              name="Otras medidas"
+              name="Other measurements"
               click={() => setOtra(1)}
             />
           )}
 
-          {/* Botón para Enviar la Orden */}
-          <Button click={enviarOrden} name="Crear Orden" />
+          {/* Button to Submit the Order */}
+          <Button click={enviarOrden} name="Create Order" />
         </div>
         <hr />
-        {/* Lista de Vigas Agregadas */}
+        {/* List of Added Beams */}
         <table className="mb-4 col-span-full w-full">
           <thead>
             <tr className="p-2 border-b ">
@@ -333,7 +333,7 @@ export default function CrearOrden() {
                 <td className="text">{viga.cantidad}</td>
                 <td className="text">({viga.medidas})</td>
                 <td className="text">
-                  {viga.cu === "0" ? "entera" : <p>{viga.cu}/bms</p>}
+                  {viga.cu === "0" ? "whole" : <p>{viga.cu}/bms</p>}
                 </td>
                 <td className="text uppercase">{viga.tipo}</td>
               </tr>
