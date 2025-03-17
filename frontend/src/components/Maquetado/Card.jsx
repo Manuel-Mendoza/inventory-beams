@@ -96,7 +96,11 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
                       ({viga.medidas}){" "}
                     </span>
                     <span className="text-sm text-gray-500">
-                      {viga.cada_una === "1" ? null : viga.cada_una}{" "}
+                      {viga.cada_una === "1"
+                        ? null
+                        : viga.cada_una === "0"
+                        ? null
+                        : viga.cada_una}{" "}
                     </span>
                     <span className="text-gray-500 uppercase">
                       # {viga.tipo}
@@ -145,7 +149,8 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
                     {/* Confirmation message */}
                     {confirmDelete === index && (
                       <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded text-center col-span-2">
-                        Are you sure you want to delete this beam? Click "confirm" to delete.
+                        Are you sure you want to delete this beam? Click
+                        "confirm" to delete.
                       </div>
                     )}
                   </div>
