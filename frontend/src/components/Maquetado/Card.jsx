@@ -100,7 +100,7 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
                         ? null
                         : viga.cada_una === "0"
                         ? null
-                        : viga.cada_una}/bms{" "}
+                        : viga.cada_una+'/bms'}{" "}
                     </span>
                     <span className="text-gray-500 uppercase">
                       # {viga.tipo}
