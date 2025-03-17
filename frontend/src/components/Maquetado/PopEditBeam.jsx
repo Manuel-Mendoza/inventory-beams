@@ -9,8 +9,8 @@ export default function PopEditBeam({ viga, orden }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    
-    
+    console.log("PopEditBeam recibió viga:", viga);
+    console.log("PopEditBeam recibió orden:", orden);
   }, [viga, orden]);
 
   const handleSubmit = async () => {
@@ -25,9 +25,9 @@ export default function PopEditBeam({ viga, orden }) {
     }
 
     try {
-      
-      
-      );
+      console.log("Actualizando viga:", viga);
+      console.log("De la orden:", orden);
+      console.log("Cantidad a restar:", parseInt(cantidad));
       
       await updateVigaQuantity(orden, viga, parseInt(cantidad));
       setEditarBeam(false);
