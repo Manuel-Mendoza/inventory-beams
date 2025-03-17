@@ -37,7 +37,7 @@ export default function PopEditBeam({ viga, orden }) {
   };
 
   return (
-    <div className="fixed bg-white/30 backdrop-blur-sm w-full h-full flex justify-center items-center z-10">
+    <div className="fixed bg-white/30 backdrop-blur-sm h-full left-0 w-full flex justify-center items-center z-10">
       <div className="grid grid-cols-2 gap-2 bg-gray-200 rounded-2xl p-10">
         <h1 className="text-2xl col-span-2">
           Edit Beam: {viga ? viga.nombre : "Not selected"}
