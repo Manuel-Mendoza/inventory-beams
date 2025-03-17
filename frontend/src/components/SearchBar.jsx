@@ -15,7 +15,7 @@ export default function SearchBar({ setView, setSearch }) {
           style={"col-span-2"}
           name="Add Order ➕"
         />
-        <Button click={() => setView("vigas")} bg={"gray"} name="Edit ✍️" style={'col-span-2'} />
+        <Button click={() => setView("edit")} bg={"gray"} name="Edit ✍️" style={'col-span-2'} />
       </div>
       <div className="flex flex-center relative w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         <Input

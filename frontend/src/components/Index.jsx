@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { ApiProvider, useApiContext } from "../context/ApiContext";
-
 import Letter from "./Letter";
 import OrderList from "./OrderList";
 import CreateOrder from "./CreateOrden";
 import PopEditBeam from "./Maquetado/PopEditBeam";
+import EditOrder from "./Vistas/EditOrder";
 
 // Componente interno que usa el contexto
 function IndexContent() {
@@ -25,13 +25,15 @@ function IndexContent() {
         <Letter setView={setView} view={view} />
         <hr />
         {view === "index" ? (
-          <OrderList 
-            setView={setView} 
+          <OrderList
+            setView={setView}
             setSelectedViga={setSelectedViga}
             setSelectedOrden={setSelectedOrden}
           />
         ) : view === "orden" ? (
           <CreateOrder />
+        ) : view === "edit" ? (
+          <EditOrder />
         ) : null}
       </div>
     </>

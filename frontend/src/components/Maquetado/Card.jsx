@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import Button from "./Button";
 import { useApiContext } from "../../context/ApiContext";
 
-export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
+export default function Card({
+  orden,
+  setSelectedViga,
+  setSelectedOrden,
+  edit,
+}) {
   const [toggler, setToggler] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [selectedViga, setSelectedVigaLocal] = useState(null);
@@ -23,6 +28,14 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
     }
     handleToggle(index);
     console.log("Viga seleccionada:", viga.nombre);
+  };
+
+  // Function to handle order click for editing
+  const handleOrderClick = (e, orderData) => {
+    if (edit && setSelectedOrden) {
+      console.log("Orden seleccionada para editar:", orderData);
+      setSelectedOrden(orderData);
+    }
   };
 
   // Function to handle deletion of a specific beam
@@ -70,7 +83,10 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
       {orden.map((data, index) => (
         <div
           key={index}
-          className="border border-gray-300 p-2 rounded-lg bg-white"
+          className={`border border-gray-300 p-2 rounded-lg bg-white ${
+            edit ? "cursor-pointer hover:bg-gray-50 hover:border-blue-400 hover:shadow-md" : ""
+          }`}
+          onClick={edit ? () => handleOrderClick(null, data) : null}
         >
           {/* Clickable header to toggle */}
           <div className="">
@@ -100,15 +116,14 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
                         ? null
                         : viga.cada_una === "0"
                         ? null
-                        : viga.cada_una+'/bms'}{" "}
+                        : viga.cada_una + "/bms"}{" "}
                     </span>
                     <span className="text-gray-500 uppercase">
                       # {viga.tipo}
                     </span>
                   </li>
                 ))}
-                {/* Content that is shown/hidden */}
-                {toggler === index && (
+                {edit ? null : toggler === index && (
                   <div className="toggle-content mt-3 p-3 bg-gray-50 rounded-md grid grid-cols-2 justify-items-center">
                     {selectedViga && (
                       <div className="col-span-2 flex flex-wrap justify-center items-center mb-2">

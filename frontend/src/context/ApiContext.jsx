@@ -260,11 +260,20 @@ export const ApiProvider = ({ children }) => {
   }, []);
 
   // Función para actualizar la cantidad de vigas (restar las terminadas)
-  const updateVigaQuantity = async (ordenData, vigaToUpdate, cantidadTerminada) => {
+  const updateVigaQuantity = async (
+    ordenData,
+    vigaToUpdate,
+    cantidadTerminada
+  ) => {
     setLoading(true);
     try {
       // Verificamos que ordenData tenga los campos necesarios
-      if (!ordenData || !ordenData.numero_orden || !ordenData.fecha || !vigaToUpdate) {
+      if (
+        !ordenData ||
+        !ordenData.numero_orden ||
+        !ordenData.fecha ||
+        !vigaToUpdate
+      ) {
         console.error("Datos recibidos:", { ordenData, vigaToUpdate });
         throw new Error("Datos incompletos para actualizar la viga");
       }
@@ -272,7 +281,9 @@ export const ApiProvider = ({ children }) => {
       // Extraemos el número de orden y la fecha
       const { numero_orden, fecha } = ordenData;
 
-      console.log(`Buscando orden con número: ${numero_orden} y fecha: ${fecha}`);
+      console.log(
+        `Buscando orden con número: ${numero_orden} y fecha: ${fecha}`
+      );
       console.log(`Viga a actualizar:`, vigaToUpdate);
       console.log(`Cantidad terminada:`, cantidadTerminada);
 
@@ -291,7 +302,9 @@ export const ApiProvider = ({ children }) => {
       );
 
       if (!ordenToUpdate) {
-        throw new Error(`No se encontró la orden con número ${numero_orden} y fecha ${fecha}`);
+        throw new Error(
+          `No se encontró la orden con número ${numero_orden} y fecha ${fecha}`
+        );
       }
 
       // Obtenemos el ID de la orden
@@ -304,8 +317,11 @@ export const ApiProvider = ({ children }) => {
       console.log(`Orden encontrada, ID: ${ordenId}`);
 
       // Actualizamos la cantidad de la viga específica
-      const updatedVigas = ordenToUpdate.vigas.map(viga => {
-        if (viga.nombre === vigaToUpdate.nombre && viga.medidas === vigaToUpdate.medidas) {
+      const updatedVigas = ordenToUpdate.vigas.map((viga) => {
+        if (
+          viga.nombre === vigaToUpdate.nombre &&
+          viga.medidas === vigaToUpdate.medidas
+        ) {
           // Calculamos la nueva cantidad (restando las terminadas)
           const nuevaCantidad = Math.max(0, viga.cantidad - cantidadTerminada);
           return { ...viga, cantidad: nuevaCantidad };
@@ -314,7 +330,7 @@ export const ApiProvider = ({ children }) => {
       });
 
       // Filtramos las vigas con cantidad 0 (opcional, según requerimiento)
-      const filteredVigas = updatedVigas.filter(viga => viga.cantidad > 0);
+      const filteredVigas = updatedVigas.filter((viga) => viga.cantidad > 0);
 
       // Si no quedan vigas, eliminamos toda la orden
       if (filteredVigas.length === 0) {
@@ -329,7 +345,10 @@ export const ApiProvider = ({ children }) => {
         };
 
         console.log("Actualizando orden con vigas restantes:", updatedOrden);
-        const updateResponse = await api.put(`ordenes/${ordenId}/`, updatedOrden);
+        const updateResponse = await api.put(
+          `ordenes/${ordenId}/`,
+          updatedOrden
+        );
         console.log("Orden actualizada:", updateResponse);
       }
 
@@ -343,7 +362,140 @@ export const ApiProvider = ({ children }) => {
 
       if (err.response) {
         console.error("Detalles de la respuesta:", err.response);
-        const errorMessage = err.response.data?.error || "Error al actualizar la viga";
+        const errorMessage =
+          err.response.data?.error || "Error al actualizar la viga";
+        throw new Error(errorMessage);
+      } else {
+        throw new Error(err.message || "Error al actualizar la viga");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Función para actualizar una orden completa
+  const updateOrden = async (ordenId, updatedOrdenData) => {
+    setLoading(true);
+    try {
+      console.log(`Actualizando orden con ID: ${ordenId}`, updatedOrdenData);
+
+      // Verificamos que los datos sean válidos
+      if (!ordenId || !updatedOrdenData) {
+        throw new Error("Datos incompletos para actualizar la orden");
+      }
+
+      // Realizamos la solicitud PUT para actualizar la orden
+      const response = await api.put(`ordenes/${ordenId}/`, updatedOrdenData);
+      console.log("Orden actualizada:", response.data);
+
+      // Actualizamos la lista después de modificar
+      await fetchOrdenes();
+      setError(false);
+      return response.data;
+    } catch (err) {
+      setError(true);
+      console.error("Error al actualizar la orden:", err);
+
+      if (err.response) {
+        console.error("Detalles de la respuesta:", err.response);
+        const errorMessage =
+          err.response.data?.error || "Error al actualizar la orden";
+        throw new Error(errorMessage);
+      } else {
+        throw new Error(err.message || "Error al actualizar la orden");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Función para actualizar una viga específica dentro de una orden
+  const updateViga = async (ordenData, oldViga, updatedViga) => {
+    setLoading(true);
+    try {
+      // Verificamos que ordenData tenga los campos necesarios
+      if (
+        !ordenData ||
+        !ordenData.numero_orden ||
+        !ordenData.fecha ||
+        !oldViga ||
+        !updatedViga
+      ) {
+        console.error("Datos recibidos:", { ordenData, oldViga, updatedViga });
+        throw new Error("Datos incompletos para actualizar la viga");
+      }
+
+      // Extraemos el número de orden y la fecha
+      const { numero_orden, fecha } = ordenData;
+
+      console.log(
+        `Buscando orden con número: ${numero_orden} y fecha: ${fecha}`
+      );
+      console.log(`Viga a actualizar:`, oldViga);
+      console.log(`Nuevos datos de viga:`, updatedViga);
+
+      // Primero obtenemos todas las órdenes para encontrar el ID
+      const response = await api.get("ordenes/");
+
+      if (!response || !response.data) {
+        throw new Error("No se pudo obtener la lista de órdenes");
+      }
+
+      const ordenes = response.data;
+
+      // Buscamos la orden específica que contiene la viga
+      const ordenToUpdate = ordenes.find(
+        (orden) => orden.numero_orden === numero_orden && orden.fecha === fecha
+      );
+
+      if (!ordenToUpdate) {
+        throw new Error(
+          `No se encontró la orden con número ${numero_orden} y fecha ${fecha}`
+        );
+      }
+
+      // Obtenemos el ID de la orden
+      const ordenId = ordenToUpdate.id;
+
+      if (!ordenId) {
+        throw new Error("No se pudo obtener el ID de la orden");
+      }
+
+      console.log(`Orden encontrada, ID: ${ordenId}`);
+
+      // Actualizamos la viga específica
+      const updatedVigas = ordenToUpdate.vigas.map((viga) => {
+        if (
+          viga.nombre === oldViga.nombre &&
+          viga.medidas === oldViga.medidas
+        ) {
+          return updatedViga;
+        }
+        return viga;
+      });
+
+      // Actualizamos la orden con las vigas actualizadas
+      const updatedOrden = {
+        ...ordenToUpdate,
+        vigas: updatedVigas,
+      };
+
+      console.log("Actualizando orden con vigas modificadas:", updatedOrden);
+      const updateResponse = await api.put(`ordenes/${ordenId}/`, updatedOrden);
+      console.log("Orden actualizada:", updateResponse);
+
+      setError(false);
+      // Actualizar la lista después de modificar
+      await fetchOrdenes();
+      return true;
+    } catch (err) {
+      setError(true);
+      console.error("Error al actualizar la viga:", err);
+
+      if (err.response) {
+        console.error("Detalles de la respuesta:", err.response);
+        const errorMessage =
+          err.response.data?.error || "Error al actualizar la viga";
         throw new Error(errorMessage);
       } else {
         throw new Error(err.message || "Error al actualizar la viga");
@@ -366,6 +518,8 @@ export const ApiProvider = ({ children }) => {
     editarBeam,
     setEditarBeam,
     updateVigaQuantity,
+    updateOrden,
+    updateViga,
   };
 
   return (
