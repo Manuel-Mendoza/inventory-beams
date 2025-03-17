@@ -16,7 +16,7 @@ export default function OrdenesList({ setView, setSelectedViga, setSelectedOrden
   return (
     <div className="p-4 bg-gray-50 rounded-lg shadow-md">
       <SearchBar setSearch={setSearch} setView={setView} search={search} />
-      {loading && <p className='text-center'>loading...</p>}
+      {loading && <p className='text-center'>Loading...</p>}
       {error ? (
         <div className="flex">
           <strong className="text-center w-full">

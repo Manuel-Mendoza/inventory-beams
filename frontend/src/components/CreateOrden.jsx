@@ -319,7 +319,7 @@ export default function CrearOrden() {
         <table className="mb-4 col-span-full w-full">
           <thead>
             <tr className="p-2 border-b ">
-              <th className="text">Bms</th>
+              <th className="text">Beams</th>
               <th className="text">Qty</th>
               <th className="text">Size</th>
               <th className="text">Each</th>
@@ -340,7 +340,7 @@ export default function CrearOrden() {
                   ) : viga.cu === "1" ? (
                     "whole"
                   ) : (
-                    <p>{viga.cu}/bms</p>
+                    <p>{viga.cu}/beams</p>
                   )}
                 </td>
                 <td className="text uppercase">{viga.tipo}</td>

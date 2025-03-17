@@ -15,12 +15,12 @@ export default function PopEditBeam({ viga, orden }) {
 
   const handleSubmit = async () => {
     if (!cantidad || isNaN(cantidad) || parseInt(cantidad) <= 0) {
-      setError("Por favor ingresa una cantidad válida");
+      setError("Please enter a valid quantity");
       return;
     }
 
     if (!viga || !orden) {
-      setError("No se ha seleccionado una viga o una orden");
+      setError("No beam or order selected");
       return;
     }
 
@@ -32,7 +32,7 @@ export default function PopEditBeam({ viga, orden }) {
       await updateVigaQuantity(orden, viga, parseInt(cantidad));
       setEditarBeam(false);
     } catch (err) {
-      setError(err.message || "Error al actualizar la viga");
+      setError(err.message || "Error updating beam");
     }
   };
 
@@ -40,9 +40,9 @@ export default function PopEditBeam({ viga, orden }) {
     <div className="fixed bg-white/30 backdrop-blur-sm w-full h-full flex justify-center items-center z-10">
       <div className="grid grid-cols-2 gap-2 bg-gray-200 rounded-2xl p-10">
         <h1 className="text-2xl col-span-2">
-          Editar Viga: {viga ? viga.nombre : "No seleccionada"}
+          Edit Beam: {viga ? viga.nombre : "Not selected"}
         </h1>
-        <p>¿Cuántas vigas terminaron?</p>
+        <p>How many beams were completed?</p>
         <Input
           placeholder="Qty"
           style={"!border-1 !bg-white-500 col-span-2"}
@@ -57,13 +57,13 @@ export default function PopEditBeam({ viga, orden }) {
         {error && <p className="text-red-500 col-span-2">{error}</p>}
         <Button
           style={"!w-full"}
-          name={"Cancelar"}
+          name={"Cancel"}
           bg={"gray"}
           click={() => setEditarBeam(false)}
         />
         <Button 
           style={"!w-full"} 
-          name={"Aceptar"} 
+          name={"Accept"} 
           click={handleSubmit}
         />
       </div>

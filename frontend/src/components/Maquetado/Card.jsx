@@ -33,7 +33,7 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
     const currentOrden = orden[index];
 
     if (!selectedViga) {
-      alert("Por favor selecciona una viga primero");
+      alert("Please select a beam first");
       return;
     }
 
@@ -51,7 +51,7 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
         }
       } catch (error) {
         console.error("Error deleting beam:", error);
-        alert("Error al eliminar la viga: " + error.message);
+        alert("Error deleting beam: " + error.message);
       }
     } else {
       
@@ -139,8 +139,7 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
                     {/* Confirmation message */}
                     {confirmDelete === index && (
                       <div className="mt-2 p-2 bg-yellow-100 text-yellow-800 rounded text-center col-span-2">
-                        ¿Estás seguro de que quieres eliminar esta viga? Haz
-                        clic en "confirm" para eliminar.
+                        Are you sure you want to delete this beam? Click "confirm" to delete.
                       </div>
                     )}
                   </div>
