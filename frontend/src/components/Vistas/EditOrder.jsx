@@ -235,12 +235,17 @@ export default function EditOrder() {
       {!isEditing ? (
         <div>
           {orden.length > 0 ? (
-            <ListadoBase 
-              orden={orden} 
-              edit={true}
-              setSelectedViga={setSelectedViga}
-              setSelectedOrden={handleSelectOrder}
-            />
+            <>
+              <div className="bg-yellow-50 p-3 rounded-md text-yellow-800 mb-4">
+                <p>Haz clic en cualquier orden para editarla.</p>
+              </div>
+              <ListadoBase 
+                orden={orden} 
+                edit={true}
+                setSelectedViga={setSelectedViga}
+                setSelectedOrden={handleSelectOrder}
+              />
+            </>
           ) : (
             <div className="text-center py-8 text-gray-500">
               No se encontraron órdenes. Intenta con otra búsqueda.
