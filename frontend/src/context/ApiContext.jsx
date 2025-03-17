@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-import Cargando from "../components/Vistas/Loading";
+import Loader from "../components/Vistas/Loader";
 // Crear el contexto
 const API_BASE = "https://vigasapp-production.up.railway.app/api/";
 const API_LOCAL = "http://localhost:8000/api/"; // Corregido el protocolo de http a https
@@ -23,26 +23,40 @@ export const ApiProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [editarBeam, setEditarBeam] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+
+  // Función para mostrar el loader con un mensaje específico
+  const showLoader = (message) => {
+    setLoadingMessage(message);
+    setLoading(true);
+  };
+
+  // Función para ocultar el loader
+  const hideLoader = () => {
+    setLoading(false);
+    setLoadingMessage("");
+  };
 
   // Función para obtener todas las órdenes
   const fetchOrdenes = async (searchTerm = "") => {
-    setLoading(true);
+    showLoader(searchTerm ? "Buscando órdenes..." : "Cargando órdenes...");
     try {
       const response = await api.get(`ordenes/${searchTerm}`);
       const data = response.data;
       setOrden(data);
+      return data;
     } catch (err) {
       setError(true);
       console.error("Error al obtener las órdenes:", err);
       return [];
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
   // Función para crear una nueva orden
   const createOrden = async (ordenData) => {
-    setLoading(true);
+    showLoader("Creando nueva orden...");
     try {
       console.log(
         "Enviando datos a la API:",
@@ -61,13 +75,13 @@ export const ApiProvider = ({ children }) => {
         "Error al crear la orden";
       throw new Error(errorMessage);
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
   // Función para eliminar una viga específica de una orden
   const deleteViga = async (ordenData, vigaToDelete) => {
-    setLoading(true);
+    showLoader("Eliminando viga...");
     try {
       // Verificamos que ordenData tenga los campos necesarios
       if (
@@ -167,13 +181,13 @@ export const ApiProvider = ({ children }) => {
         throw new Error(err.message || "Error al eliminar la viga");
       }
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
   // Función para eliminar una orden completa
   const deleteOrden = async (ordenData) => {
-    setLoading(true);
+    showLoader("Eliminando orden...");
     try {
       // Verificamos que ordenData tenga los campos necesarios
       if (!ordenData || !ordenData.numero_orden || !ordenData.fecha) {
@@ -250,7 +264,7 @@ export const ApiProvider = ({ children }) => {
         throw new Error(err.message || "Error al eliminar la orden");
       }
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
@@ -265,7 +279,7 @@ export const ApiProvider = ({ children }) => {
     vigaToUpdate,
     cantidadTerminada
   ) => {
-    setLoading(true);
+    showLoader("Actualizando cantidad de vigas...");
     try {
       // Verificamos que ordenData tenga los campos necesarios
       if (
@@ -369,25 +383,25 @@ export const ApiProvider = ({ children }) => {
         throw new Error(err.message || "Error al actualizar la viga");
       }
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
   // Función para actualizar una orden completa
   const updateOrden = async (ordenId, updatedOrdenData) => {
-    setLoading(true);
+    showLoader("Actualizando orden...");
     try {
       console.log(`Actualizando orden con ID: ${ordenId}`, updatedOrdenData);
-
+      
       // Verificamos que los datos sean válidos
       if (!ordenId || !updatedOrdenData) {
         throw new Error("Datos incompletos para actualizar la orden");
       }
-
+      
       // Realizamos la solicitud PUT para actualizar la orden
       const response = await api.put(`ordenes/${ordenId}/`, updatedOrdenData);
       console.log("Orden actualizada:", response.data);
-
+      
       // Actualizamos la lista después de modificar
       await fetchOrdenes();
       setError(false);
@@ -395,32 +409,25 @@ export const ApiProvider = ({ children }) => {
     } catch (err) {
       setError(true);
       console.error("Error al actualizar la orden:", err);
-
+      
       if (err.response) {
         console.error("Detalles de la respuesta:", err.response);
-        const errorMessage =
-          err.response.data?.error || "Error al actualizar la orden";
+        const errorMessage = err.response.data?.error || "Error al actualizar la orden";
         throw new Error(errorMessage);
       } else {
         throw new Error(err.message || "Error al actualizar la orden");
       }
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
-
+  
   // Función para actualizar una viga específica dentro de una orden
   const updateViga = async (ordenData, oldViga, updatedViga) => {
-    setLoading(true);
+    showLoader("Actualizando viga...");
     try {
       // Verificamos que ordenData tenga los campos necesarios
-      if (
-        !ordenData ||
-        !ordenData.numero_orden ||
-        !ordenData.fecha ||
-        !oldViga ||
-        !updatedViga
-      ) {
+      if (!ordenData || !ordenData.numero_orden || !ordenData.fecha || !oldViga || !updatedViga) {
         console.error("Datos recibidos:", { ordenData, oldViga, updatedViga });
         throw new Error("Datos incompletos para actualizar la viga");
       }
@@ -428,9 +435,7 @@ export const ApiProvider = ({ children }) => {
       // Extraemos el número de orden y la fecha
       const { numero_orden, fecha } = ordenData;
 
-      console.log(
-        `Buscando orden con número: ${numero_orden} y fecha: ${fecha}`
-      );
+      console.log(`Buscando orden con número: ${numero_orden} y fecha: ${fecha}`);
       console.log(`Viga a actualizar:`, oldViga);
       console.log(`Nuevos datos de viga:`, updatedViga);
 
@@ -494,14 +499,13 @@ export const ApiProvider = ({ children }) => {
 
       if (err.response) {
         console.error("Detalles de la respuesta:", err.response);
-        const errorMessage =
-          err.response.data?.error || "Error al actualizar la viga";
+        const errorMessage = err.response.data?.error || "Error al actualizar la viga";
         throw new Error(errorMessage);
       } else {
         throw new Error(err.message || "Error al actualizar la viga");
       }
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
@@ -509,6 +513,7 @@ export const ApiProvider = ({ children }) => {
   const contextValue = {
     orden,
     loading,
+    loadingMessage,
     error,
     setError,
     fetchOrdenes,
@@ -523,6 +528,9 @@ export const ApiProvider = ({ children }) => {
   };
 
   return (
-    <ApiContext.Provider value={contextValue}>{children}</ApiContext.Provider>
+    <ApiContext.Provider value={contextValue}>
+      {loading && <Loader message={loadingMessage} />}
+      {children}
+    </ApiContext.Provider>
   );
 };

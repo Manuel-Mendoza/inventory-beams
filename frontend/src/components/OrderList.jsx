@@ -3,7 +3,6 @@ import SearchBar from "./SearchBar";
 import ListadoBase from "./Vistas/ListadoBase";
 import BusquedaRealizada from "./Vistas/Busqueda";
 import { useApiContext } from "../context/ApiContext";
-import Loading from "./Vistas/Loading";
 
 export default function OrdenesList({ setView, setSelectedViga, setSelectedOrden }) {
   const [search, setSearch] = useState("");

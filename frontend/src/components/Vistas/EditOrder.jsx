@@ -224,7 +224,7 @@ export default function EditOrder() {
         </div>
       )}
       
-      {/* Indicador de carga */}
+      {/* Indicador de carga global */}
       {loading && (
         <div className="text-center py-4">
           <p className="text-gray-600">Cargando...</p>
