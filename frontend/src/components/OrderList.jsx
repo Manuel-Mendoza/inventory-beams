@@ -5,7 +5,7 @@ import BusquedaRealizada from "./Vistas/Busqueda";
 import { useApiContext } from "../context/ApiContext";
 import Loading from "./Vistas/Loading";
 
-export default function OrdenesList({ setView }) {
+export default function OrdenesList({ setView, setSelectedViga, setSelectedOrden }) {
   const [search, setSearch] = useState("");
   const { orden, loading, fetchOrdenes, error } = useApiContext();
 
@@ -24,9 +24,9 @@ export default function OrdenesList({ setView }) {
           </strong>
         </div>
       ) : search === "" ? (
-        <ListadoBase orden={orden} />
+        <ListadoBase orden={orden} setSelectedViga={setSelectedViga} setSelectedOrden={setSelectedOrden} />
       ) : (
-        <BusquedaRealizada orden={orden} />
+        <BusquedaRealizada orden={orden} setSelectedViga={setSelectedViga} setSelectedOrden={setSelectedOrden} />
       )}
     </div>
   );

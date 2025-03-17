@@ -10,15 +10,26 @@ import PopEditBeam from "./Maquetado/PopEditBeam";
 function IndexContent() {
   const [view, setView] = useState("index");
   const { editarBeam } = useApiContext();
+  const [selectedViga, setSelectedViga] = useState(null);
+  const [selectedOrden, setSelectedOrden] = useState(null);
+
+  console.log("Selected Viga:", selectedViga);
+  console.log("Selected Orden:", selectedOrden);
 
   return (
     <>
-      {editarBeam && <PopEditBeam />}
+      {editarBeam && selectedViga && selectedOrden && (
+        <PopEditBeam viga={selectedViga} orden={selectedOrden} />
+      )}
       <div className="p-6 max-md:p-1">
         <Letter setView={setView} view={view} />
         <hr />
         {view === "index" ? (
-          <OrderList setView={setView} />
+          <OrderList 
+            setView={setView} 
+            setSelectedViga={setSelectedViga}
+            setSelectedOrden={setSelectedOrden}
+          />
         ) : view === "orden" ? (
           <CreateOrder />
         ) : null}

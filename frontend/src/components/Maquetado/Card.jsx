@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Button from "./Button";
 import { useApiContext } from "../../context/ApiContext";
 
-export default function Card({ orden }) {
+export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
   const [toggler, setToggler] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
-  const [selectedViga, setSelectedViga] = useState(null);
+  const [selectedViga, setSelectedVigaLocal] = useState(null);
   const { deleteOrden, deleteViga, setEditarBeam } = useApiContext();
 
   // Function to handle toggle
@@ -17,7 +17,10 @@ export default function Card({ orden }) {
   // Function to handle viga click
   const handleVigaClick = (e, viga, index) => {
     e.stopPropagation(); // Prevent triggering parent click events
-    setSelectedViga(viga);
+    setSelectedVigaLocal(viga);
+    if (setSelectedViga) {
+      setSelectedViga(viga);
+    }
     handleToggle(index);
     console.log("Viga seleccionada:", viga.nombre);
   };
@@ -48,7 +51,10 @@ export default function Card({ orden }) {
         console.log("Beam deleted successfully");
         setConfirmDelete(null);
         setToggler(null);
-        setSelectedViga(null);
+        setSelectedVigaLocal(null);
+        if (setSelectedViga) {
+          setSelectedViga(null);
+        }
       } catch (error) {
         console.error("Error deleting beam:", error);
         alert("Error al eliminar la viga: " + error.message);
@@ -115,6 +121,14 @@ export default function Card({ orden }) {
                       name="edit"
                       click={(e) => {
                         e.stopPropagation();
+                        if (setSelectedViga) {
+                          setSelectedViga(selectedViga);
+                        }
+                        if (setSelectedOrden) {
+                          setSelectedOrden(data);
+                        }
+                        console.log("Editando viga:", selectedViga);
+                        console.log("De la orden:", data);
                         setEditarBeam(true);
                       }}
                     />

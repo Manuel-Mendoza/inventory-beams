@@ -259,6 +259,100 @@ export const ApiProvider = ({ children }) => {
     fetchOrdenes();
   }, []);
 
+  // Función para actualizar la cantidad de vigas (restar las terminadas)
+  const updateVigaQuantity = async (ordenData, vigaToUpdate, cantidadTerminada) => {
+    setLoading(true);
+    try {
+      // Verificamos que ordenData tenga los campos necesarios
+      if (!ordenData || !ordenData.numero_orden || !ordenData.fecha || !vigaToUpdate) {
+        console.error("Datos recibidos:", { ordenData, vigaToUpdate });
+        throw new Error("Datos incompletos para actualizar la viga");
+      }
+
+      // Extraemos el número de orden y la fecha
+      const { numero_orden, fecha } = ordenData;
+
+      console.log(`Buscando orden con número: ${numero_orden} y fecha: ${fecha}`);
+      console.log(`Viga a actualizar:`, vigaToUpdate);
+      console.log(`Cantidad terminada:`, cantidadTerminada);
+
+      // Primero obtenemos todas las órdenes para encontrar el ID
+      const response = await api.get("ordenes/");
+
+      if (!response || !response.data) {
+        throw new Error("No se pudo obtener la lista de órdenes");
+      }
+
+      const ordenes = response.data;
+
+      // Buscamos la orden específica que contiene la viga
+      const ordenToUpdate = ordenes.find(
+        (orden) => orden.numero_orden === numero_orden && orden.fecha === fecha
+      );
+
+      if (!ordenToUpdate) {
+        throw new Error(`No se encontró la orden con número ${numero_orden} y fecha ${fecha}`);
+      }
+
+      // Obtenemos el ID de la orden
+      const ordenId = ordenToUpdate.id;
+
+      if (!ordenId) {
+        throw new Error("No se pudo obtener el ID de la orden");
+      }
+
+      console.log(`Orden encontrada, ID: ${ordenId}`);
+
+      // Actualizamos la cantidad de la viga específica
+      const updatedVigas = ordenToUpdate.vigas.map(viga => {
+        if (viga.nombre === vigaToUpdate.nombre && viga.medidas === vigaToUpdate.medidas) {
+          // Calculamos la nueva cantidad (restando las terminadas)
+          const nuevaCantidad = Math.max(0, viga.cantidad - cantidadTerminada);
+          return { ...viga, cantidad: nuevaCantidad };
+        }
+        return viga;
+      });
+
+      // Filtramos las vigas con cantidad 0 (opcional, según requerimiento)
+      const filteredVigas = updatedVigas.filter(viga => viga.cantidad > 0);
+
+      // Si no quedan vigas, eliminamos toda la orden
+      if (filteredVigas.length === 0) {
+        console.log("No quedan vigas, eliminando toda la orden");
+        const deleteResponse = await api.delete(`ordenes/${ordenId}/`);
+        console.log("Orden eliminada completamente:", deleteResponse);
+      } else {
+        // Si quedan vigas, actualizamos la orden con las vigas actualizadas
+        const updatedOrden = {
+          ...ordenToUpdate,
+          vigas: filteredVigas,
+        };
+
+        console.log("Actualizando orden con vigas restantes:", updatedOrden);
+        const updateResponse = await api.put(`ordenes/${ordenId}/`, updatedOrden);
+        console.log("Orden actualizada:", updateResponse);
+      }
+
+      setError(false);
+      // Actualizar la lista después de modificar
+      await fetchOrdenes();
+      return true;
+    } catch (err) {
+      setError(true);
+      console.error("Error al actualizar la viga:", err);
+
+      if (err.response) {
+        console.error("Detalles de la respuesta:", err.response);
+        const errorMessage = err.response.data?.error || "Error al actualizar la viga";
+        throw new Error(errorMessage);
+      } else {
+        throw new Error(err.message || "Error al actualizar la viga");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Valor del contexto que se proporcionará
   const contextValue = {
     orden,
@@ -271,6 +365,7 @@ export const ApiProvider = ({ children }) => {
     deleteViga,
     editarBeam,
     setEditarBeam,
+    updateVigaQuantity,
   };
 
   return (
