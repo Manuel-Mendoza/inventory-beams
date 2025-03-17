@@ -62,7 +62,7 @@ export default function CrearOrden() {
     };
 
     setVigas([...vigas, nuevaViga]);
-    console.log("New Beam:", nuevaViga);
+    
 
     // Clear fields after adding
     setNombre("");

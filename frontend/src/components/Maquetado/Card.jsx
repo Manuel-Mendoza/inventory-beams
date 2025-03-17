@@ -22,7 +22,7 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
       setSelectedViga(viga);
     }
     handleToggle(index);
-    console.log("Viga seleccionada:", viga.nombre);
+    
   };
 
   // Function to handle deletion of a specific beam
@@ -37,18 +37,12 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
       return;
     }
 
-    console.log(
-      "Trying to delete beam:",
-      selectedViga.nombre,
-      "from order:",
-      currentOrden.numero_orden
-    );
 
     if (confirmDelete === index) {
       try {
-        console.log("Confirmation received, proceeding to delete beam");
+        
         await deleteViga(currentOrden, selectedViga);
-        console.log("Beam deleted successfully");
+        
         setConfirmDelete(null);
         setToggler(null);
         setSelectedVigaLocal(null);
@@ -60,7 +54,7 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
         alert("Error al eliminar la viga: " + error.message);
       }
     } else {
-      console.log("First click, requesting confirmation");
+      
       setConfirmDelete(index);
     }
   };
@@ -127,8 +121,8 @@ export default function Card({ orden, setSelectedViga, setSelectedOrden }) {
                         if (setSelectedOrden) {
                           setSelectedOrden(data);
                         }
-                        console.log("Editando viga:", selectedViga);
-                        console.log("De la orden:", data);
+                        
+                        
                         setEditarBeam(true);
                       }}
                     />

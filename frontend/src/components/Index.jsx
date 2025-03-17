@@ -13,9 +13,6 @@ function IndexContent() {
   const [selectedViga, setSelectedViga] = useState(null);
   const [selectedOrden, setSelectedOrden] = useState(null);
 
-  console.log("Selected Viga:", selectedViga);
-  console.log("Selected Orden:", selectedOrden);
-
   return (
     <>
       {editarBeam && selectedViga && selectedOrden && (
