@@ -15,13 +15,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Función temporal para desarrollo
-  const handleDevLogin = () => {
-    localStorage.setItem("token", "dev-token");
-    localStorage.setItem("username", username || "Usuario");
-    navigate("/app");
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -30,11 +23,11 @@ export default function Login() {
     try {
       console.log("Intentando login con:", { username, password });
       console.log("URL:", `${API_LOCAL}login/`);
-      
+
       // Llamada a la API de login
       const response = await axios.post(`${API_LOCAL}login/`, {
         username,
-        password
+        password,
       });
 
       console.log("Respuesta completa:", response);
@@ -42,18 +35,18 @@ export default function Login() {
       // Guardar el token en localStorage
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
-      
+
       console.log("Login exitoso:", response.data);
-      
+
       // Navegar a la aplicación principal
       navigate("/app");
     } catch (err) {
       console.error("Error completo:", err);
       console.error("Respuesta del servidor:", err.response?.data);
       setError(
-        err.response?.data?.non_field_errors?.[0] || 
-        JSON.stringify(err.response?.data) ||
-        "Error al iniciar sesión. Verifica tus credenciales."
+        err.response?.data?.non_field_errors?.[0] ||
+          JSON.stringify(err.response?.data) ||
+          "Error al iniciar sesión. Verifica tus credenciales."
       );
     } finally {
       setLoading(false);
@@ -66,13 +59,13 @@ export default function Login() {
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Inventory Beams Login
         </h2>
-        
+
         {error && (
           <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -86,7 +79,7 @@ export default function Login() {
               style="w-full"
             />
           </div>
-          
+
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Contraseña
@@ -99,7 +92,7 @@ export default function Login() {
               style="w-full"
             />
           </div>
-          
+
           <div className="flex items-center justify-center flex-col gap-2">
             <Button
               type="submit"
@@ -108,15 +101,6 @@ export default function Login() {
               style="!w-full"
               click={handleLogin}
             />
-            
-            {/* Botón temporal para desarrollo */}
-            <button 
-              type="button" 
-              onClick={handleDevLogin}
-              className="text-sm text-gray-500 hover:underline mt-2"
-            >
-              Modo Desarrollo (Sin API)
-            </button>
           </div>
         </form>
       </div>
