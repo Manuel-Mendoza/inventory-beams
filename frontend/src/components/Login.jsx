@@ -54,21 +54,21 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+    <div className="h-screen flex items-center justify-center bg-gray-100 !overflow-hidden">
+      <div className="bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-md mx-4">
+        <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center text-gray-800">
           Inventory Beams Login
         </h2>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+          <div className="mb-4 p-2 md:p-3 bg-red-100 text-red-700 rounded-md text-sm">
             {error}
           </div>
         )}
 
         <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-3 md:mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-1 md:mb-2">
               Usuario
             </label>
             <Input
@@ -80,8 +80,8 @@ export default function Login() {
             />
           </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+          <div className="mb-4 md:mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-1 md:mb-2">
               Contraseña
             </label>
             <Input
