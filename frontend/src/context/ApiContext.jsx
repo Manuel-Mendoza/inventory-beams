@@ -11,7 +11,7 @@ export const useApiContext = () => useContext(ApiContext);
 
 // Crear la instancia de axios
 const api = axios.create({
-  baseURL: API_BASE, // Cambiado a API_BASE para producción
+  baseURL: API_LOCAL, // Cambiado a API_BASE para producción
   headers: {
     "Content-Type": "application/json",
   },
