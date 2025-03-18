@@ -23,12 +23,12 @@ export const ApiProvider = ({ children }) => {
   // Crear la instancia de axios con el token de autenticación
   const getApi = () => {
     const token = localStorage.getItem("token");
-    
+
     return axios.create({
       baseURL: API_BASE,
       headers: {
         "Content-Type": "application/json",
-        ...(token ? { "Authorization": `Token ${token}` } : {})
+        ...(token ? { Authorization: `Token ${token}` } : {}),
       },
     });
   };
@@ -404,17 +404,17 @@ export const ApiProvider = ({ children }) => {
     showLoader("Actualizando orden...");
     try {
       console.log(`Actualizando orden con ID: ${ordenId}`, updatedOrdenData);
-      
+
       // Verificamos que los datos sean válidos
       if (!ordenId || !updatedOrdenData) {
         throw new Error("Datos incompletos para actualizar la orden");
       }
-      
+
       const api = getApi();
       // Realizamos la solicitud PUT para actualizar la orden
       const response = await api.put(`ordenes/${ordenId}/`, updatedOrdenData);
       console.log("Orden actualizada:", response.data);
-      
+
       // Actualizamos la lista después de modificar
       await fetchOrdenes();
       setError(false);
@@ -422,10 +422,11 @@ export const ApiProvider = ({ children }) => {
     } catch (err) {
       setError(true);
       console.error("Error al actualizar la orden:", err);
-      
+
       if (err.response) {
         console.error("Detalles de la respuesta:", err.response);
-        const errorMessage = err.response.data?.error || "Error al actualizar la orden";
+        const errorMessage =
+          err.response.data?.error || "Error al actualizar la orden";
         throw new Error(errorMessage);
       } else {
         throw new Error(err.message || "Error al actualizar la orden");
@@ -434,13 +435,19 @@ export const ApiProvider = ({ children }) => {
       hideLoader();
     }
   };
-  
+
   // Función para actualizar una viga específica dentro de una orden
   const updateViga = async (ordenData, oldViga, updatedViga) => {
     showLoader("Actualizando viga...");
     try {
       // Verificamos que ordenData tenga los campos necesarios
-      if (!ordenData || !ordenData.numero_orden || !ordenData.fecha || !oldViga || !updatedViga) {
+      if (
+        !ordenData ||
+        !ordenData.numero_orden ||
+        !ordenData.fecha ||
+        !oldViga ||
+        !updatedViga
+      ) {
         console.error("Datos recibidos:", { ordenData, oldViga, updatedViga });
         throw new Error("Datos incompletos para actualizar la viga");
       }
@@ -448,7 +455,9 @@ export const ApiProvider = ({ children }) => {
       // Extraemos el número de orden y la fecha
       const { numero_orden, fecha } = ordenData;
 
-      console.log(`Buscando orden con número: ${numero_orden} y fecha: ${fecha}`);
+      console.log(
+        `Buscando orden con número: ${numero_orden} y fecha: ${fecha}`
+      );
       console.log(`Viga a actualizar:`, oldViga);
       console.log(`Nuevos datos de viga:`, updatedViga);
 
@@ -513,7 +522,8 @@ export const ApiProvider = ({ children }) => {
 
       if (err.response) {
         console.error("Detalles de la respuesta:", err.response);
-        const errorMessage = err.response.data?.error || "Error al actualizar la viga";
+        const errorMessage =
+          err.response.data?.error || "Error al actualizar la viga";
         throw new Error(errorMessage);
       } else {
         throw new Error(err.message || "Error al actualizar la viga");

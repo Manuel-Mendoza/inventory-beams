@@ -36,8 +36,6 @@ export default function Login() {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
 
-      console.log("Login exitoso:", response.data);
-
       // Navegar a la aplicación principal
       navigate("/app");
     } catch (err) {
