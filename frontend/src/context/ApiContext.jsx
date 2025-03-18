@@ -23,13 +23,16 @@ export const ApiProvider = ({ children }) => {
   // Crear la instancia de axios con el token de autenticación
   const getApi = () => {
     const token = localStorage.getItem("token");
+    const csrfToken = Cookies.get("csrftoken");
 
     return axios.create({
       baseURL: API_BASE,
       headers: {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Token ${token}` } : {}),
+        "X-CSRFToken": csrfToken,
       },
+      withCredentials: true, // Asegúrate de que las cookies se envíen con las solicitudes
     });
   };
 
