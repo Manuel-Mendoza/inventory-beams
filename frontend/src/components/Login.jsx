@@ -28,8 +28,6 @@ export default function Login() {
         password,
       });
 
-      console.log("Respuesta completa:", response);
-
       // Guardar el token en localStorage
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
