@@ -1,12 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Letter({ setView, view }) {
-  const navigate = useNavigate();
-  
+  const { username, logout } = useAuth();
+
   const handleLogout = () => {
-    // Redirigir al login
-    navigate("/");
+    logout();
   };
 
   return (
@@ -22,7 +21,7 @@ export default function Letter({ setView, view }) {
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
-            Orders
+            Orders 🗒
           </button>
           <button
             onClick={() => setView("orden")}
@@ -32,7 +31,7 @@ export default function Letter({ setView, view }) {
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
-            New Order
+            New Order ➕
           </button>
           <button
             onClick={() => setView("edit")}
@@ -42,14 +41,14 @@ export default function Letter({ setView, view }) {
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
-            Edit Order
+            Edit Order ✏️
           </button>
         </div>
       </div>
-      
+
       <div className="flex items-center">
         <span className="mr-4 text-gray-600">
-          Usuario: Admin
+          Usuario: {username || "Admin"}
         </span>
         <button
           onClick={handleLogout}

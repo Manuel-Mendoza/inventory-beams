@@ -1,21 +1,15 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Loader from "../components/Vistas/Loader";
+import { useAuth } from "./AuthContext";
+
 // Crear el contexto
 const API_BASE = "https://vigasapp-production.up.railway.app/api/";
-const API_LOCAL = "http://localhost:8000/api/"; // Corregido el protocolo de http a https
+const API_LOCAL = "http://localhost:8000/api/";
 const ApiContext = createContext();
 
 // Hook personalizado para usar el contexto
 export const useApiContext = () => useContext(ApiContext);
-
-// Crear la instancia de axios
-const api = axios.create({
-  baseURL: API_LOCAL, // Cambiado a API_BASE para producción
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
 
 // Proveedor del contexto
 export const ApiProvider = ({ children }) => {
@@ -24,6 +18,20 @@ export const ApiProvider = ({ children }) => {
   const [error, setError] = useState(false);
   const [editarBeam, setEditarBeam] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const { isAuthenticated } = useAuth();
+
+  // Crear la instancia de axios con el token de autenticación
+  const getApi = () => {
+    const token = localStorage.getItem("token");
+    
+    return axios.create({
+      baseURL: API_LOCAL,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Token ${token}` } : {})
+      },
+    });
+  };
 
   // Función para mostrar el loader con un mensaje específico
   const showLoader = (message) => {
@@ -41,6 +49,7 @@ export const ApiProvider = ({ children }) => {
   const fetchOrdenes = async (searchTerm = "") => {
     showLoader(searchTerm ? "Buscando órdenes..." : "Cargando órdenes...");
     try {
+      const api = getApi();
       const response = await api.get(`ordenes/${searchTerm}`);
       const data = response.data;
       setOrden(data);
@@ -62,6 +71,7 @@ export const ApiProvider = ({ children }) => {
         "Enviando datos a la API:",
         JSON.stringify(ordenData, null, 2)
       );
+      const api = getApi();
       const response = await api.post("ordenes/", ordenData);
       await fetchOrdenes(); // Actualizar la lista después de crear
       setError(false);
@@ -103,6 +113,7 @@ export const ApiProvider = ({ children }) => {
       console.log(`Viga a eliminar:`, vigaToDelete);
 
       try {
+        const api = getApi();
         // Primero obtenemos todas las órdenes para encontrar el ID
         const response = await api.get("ordenes/");
 
@@ -203,6 +214,7 @@ export const ApiProvider = ({ children }) => {
       );
 
       try {
+        const api = getApi();
         // Primero obtenemos todas las órdenes para encontrar el ID
         const response = await api.get("ordenes/");
         console.log("Respuesta de la API (ordenes):", response);
@@ -398,6 +410,7 @@ export const ApiProvider = ({ children }) => {
         throw new Error("Datos incompletos para actualizar la orden");
       }
       
+      const api = getApi();
       // Realizamos la solicitud PUT para actualizar la orden
       const response = await api.put(`ordenes/${ordenId}/`, updatedOrdenData);
       console.log("Orden actualizada:", response.data);
@@ -439,6 +452,7 @@ export const ApiProvider = ({ children }) => {
       console.log(`Viga a actualizar:`, oldViga);
       console.log(`Nuevos datos de viga:`, updatedViga);
 
+      const api = getApi();
       // Primero obtenemos todas las órdenes para encontrar el ID
       const response = await api.get("ordenes/");
 
@@ -508,6 +522,13 @@ export const ApiProvider = ({ children }) => {
       hideLoader();
     }
   };
+
+  // Cargar datos iniciales
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchOrdenes();
+    }
+  }, [isAuthenticated]);
 
   // Valor del contexto que se proporcionará
   const contextValue = {

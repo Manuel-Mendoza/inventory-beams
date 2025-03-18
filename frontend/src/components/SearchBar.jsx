@@ -8,14 +8,6 @@ export default function SearchBar({ setView, setSearch }) {
   const { setError } = useApiContext();
   return (
     <div className="p-6 flex flex-col items-center w-full">
-      <div className="max-md:grid min-md:flex justify-center grid-cols-2 gap-1 mb-3 w-full">
-        {/* <Button click={() => setView("vigas")} bg={'red'} name="Delete ➖" />*/}
-        <Button
-          click={() => setView("orden")}
-          style={"col-span-2"}
-          name="Add Order ➕"
-        />
-      </div>
       <div className="flex flex-center relative w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         <Input
           value={busqueda}
