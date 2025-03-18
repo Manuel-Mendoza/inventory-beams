@@ -21,9 +21,9 @@ export default function Letter({ setView, view }) {
           Cerrar Sesión
         </button>
       </div>
-      <div className="flex items-center max-md:grid gap-2">
+      <div className="flex items-center max-md:grid gap-2 w-full">
         <h1 className="text-2xl font-bold text-gray-800">Inventory Beams</h1>
-        <div className="ml-6 space-x-4 max-md:grid gap-2">
+        <div className="space-x-4 max-md:grid gap-2">
           <button
             onClick={() => setView("index")}
             className={`px-4 py-2 rounded-md mr-0 w-full ${
