@@ -15,14 +15,14 @@ export default function EditOrder() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Estado para editar la orden
+  // State for editing the order
   const [editedOrder, setEditedOrder] = useState({
     numero_orden: "",
     fecha: "",
     vigas: [],
   });
 
-  // Estado para editar una viga
+  // State for editing a beam
   const [editedViga, setEditedViga] = useState({
     nombre: "",
     cantidad: 0,
@@ -31,7 +31,7 @@ export default function EditOrder() {
     cada_una: "0",
   });
 
-  // Actualizar el estado editedOrder cuando se selecciona una orden
+  // Update editedOrder state when an order is selected
   useEffect(() => {
     if (selectedOrder) {
       setEditedOrder({
@@ -43,7 +43,7 @@ export default function EditOrder() {
     }
   }, [selectedOrder]);
 
-  // Actualizar el estado editedViga cuando se selecciona una viga
+  // Update editedViga state when a beam is selected
   useEffect(() => {
     if (selectedViga) {
       setEditedViga({
@@ -52,24 +52,24 @@ export default function EditOrder() {
     }
   }, [selectedViga]);
 
-  // Función para buscar órdenes
+  // Function to search orders
   const handleSearch = () => {
     fetchOrdenes(searchTerm);
   };
 
-  // Función para limpiar la búsqueda
+  // Function to clear the search
   const handleClearSearch = () => {
     setSearchTerm("");
     fetchOrdenes();
   };
 
-  // Función para seleccionar una orden para editar
+  // Function to select an order for editing
   const handleSelectOrder = (order) => {
     setSelectedOrder(order);
     setIsEditing(true);
   };
 
-  // Función para volver a la lista de órdenes
+  // Function to return to the order list
   const handleBackToList = () => {
     setSelectedOrder(null);
     setIsEditing(false);
@@ -79,69 +79,69 @@ export default function EditOrder() {
     setSuccess("");
   };
 
-  // Función para guardar los cambios de la orden
+  // Function to save order changes
   const handleSaveOrder = async () => {
     try {
       setError("");
 
-      // Validaciones básicas
+      // Basic validations
       if (!editedOrder.numero_orden.trim()) {
-        setError("El número de orden es obligatorio");
+        setError("Order number is required");
         return;
       }
 
       if (!editedOrder.fecha.trim()) {
-        setError("La fecha es obligatoria");
+        setError("Date is required");
         return;
       }
 
-      // Guardar los cambios
+      // Save changes
       await updateOrden(editedOrder.id, editedOrder);
-      setSuccess("Orden actualizada correctamente");
+      setSuccess("Order updated successfully");
 
-      // Actualizar la orden seleccionada con los nuevos datos
+      // Update the selected order with new data
       setSelectedOrder(editedOrder);
 
-      // Limpiar el mensaje de éxito después de 3 segundos
+      // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccess("");
       }, 3000);
     } catch (err) {
-      setError(err.message || "Error al guardar los cambios");
+      setError(err.message || "Error saving changes");
     }
   };
 
-  // Función para editar una viga
+  // Function to edit a beam
   const handleEditViga = (viga) => {
     setSelectedViga(viga);
     setIsEditingViga(true);
   };
 
-  // Función para guardar los cambios de la viga
+  // Function to save beam changes
   const handleSaveViga = async () => {
     try {
       setError("");
 
-      // Validaciones básicas
+      // Basic validations
       if (!editedViga.nombre.trim()) {
-        setError("El nombre de la viga es obligatorio");
+        setError("Beam name is required");
         return;
       }
 
       if (isNaN(editedViga.cantidad) || editedViga.cantidad <= 0) {
-        setError("La cantidad debe ser un número mayor que cero");
+        setError("Quantity must be a number greater than zero");
         return;
       }
 
       if (!editedViga.medidas.trim()) {
-        setError("Las medidas son obligatorias");
+        setError("Measurements are required");
         return;
       }
 
-      // Guardar los cambios
+      // Save changes
       await updateViga(selectedOrder, selectedViga, editedViga);
 
-      // Actualizar la lista de vigas en la orden editada
+      // Update the list of beams in the edited order
       const updatedVigas = editedOrder.vigas.map((viga) =>
         viga.nombre === selectedViga.nombre &&
         viga.medidas === selectedViga.medidas
@@ -154,22 +154,22 @@ export default function EditOrder() {
         vigas: updatedVigas,
       });
 
-      setSuccess("Viga actualizada correctamente");
+      setSuccess("Beam updated successfully");
       setIsEditingViga(false);
 
-      // Actualizar la viga seleccionada con los nuevos datos
+      // Update the selected beam with new data
       setSelectedViga(editedViga);
 
-      // Limpiar el mensaje de éxito después de 3 segundos
+      // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccess("");
       }, 3000);
     } catch (err) {
-      setError(err.message || "Error al guardar los cambios de la viga");
+      setError(err.message || "Error saving beam changes");
     }
   };
 
-  // Función para cancelar la edición de la viga
+  // Function to cancel beam editing
   const handleCancelEditViga = () => {
     setIsEditingViga(false);
     setEditedViga({ ...selectedViga });
@@ -179,21 +179,21 @@ export default function EditOrder() {
   return (
     <div className="space-y-4">
       <br />
-      <h1 className="text-xl text-center font-bold">Editar Órdenes</h1>
+      <h1 className="text-xl text-center font-bold">Edit Orders</h1>
       <br />
 
-      {/* Barra de búsqueda (solo visible cuando no estamos editando) */}
+      {/* Search bar (only visible when not editing) */}
       {!isEditing && (
         <div className="flex space-x-2 mb-4">
           <Input
             style="!border-1 flex-grow"
-            placeholder="Buscar por número de orden..."
+            placeholder="Search by order number..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Button name="Buscar" click={handleSearch} style="!px-4" />
+          <Button name="Search" click={handleSearch} style="!px-4" />
           <Button
-            name="Limpiar"
+            name="Clear"
             bg="gray"
             click={handleClearSearch}
             style="!px-4"
@@ -201,7 +201,7 @@ export default function EditOrder() {
         </div>
       )}
 
-      {/* Mensajes de error y éxito */}
+      {/* Error and success messages */}
       {error && (
         <div className="bg-red-50 p-3 rounded-md text-red-800 mb-4">
           {error}
@@ -214,31 +214,30 @@ export default function EditOrder() {
         </div>
       )}
 
-      {/* Instrucciones (solo visibles cuando no estamos editando) */}
+      {/* Instructions (only visible when not editing) */}
       {!isEditing && (
         <div className="bg-blue-50 p-3 rounded-md text-blue-800 mb-4">
-          <p>Selecciona una orden para ver sus detalles y editarla.</p>
+          <p>Select an order to view its details and edit it.</p>
           <p className="text-sm mt-1">
-            Puedes buscar por número de orden para encontrar órdenes
-            específicas.
+            You can search by order number to find specific orders.
           </p>
         </div>
       )}
 
-      {/* Indicador de carga global */}
+      {/* Global loading indicator */}
       {loading && (
         <div className="text-center py-4">
-          <p className="text-gray-600">Cargando...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       )}
 
-      {/* Lista de órdenes */}
+      {/* Order list */}
       {!isEditing ? (
         <div>
           {orden.length > 0 ? (
             <>
               <div className="bg-yellow-50 p-3 rounded-md text-yellow-800 mb-4">
-                <p>Haz clic en cualquier orden para editarla.</p>
+                <p>Click on any order to edit it.</p>
               </div>
               <ListadoBase
                 orden={orden}
@@ -249,29 +248,29 @@ export default function EditOrder() {
             </>
           ) : (
             <div className="text-center py-8 text-gray-500">
-              No se encontraron órdenes. Intenta con otra búsqueda.
+              No orders found. Try another search.
             </div>
           )}
         </div>
       ) : (
         <div className="bg-white p-4 rounded-lg shadow">
-          {/* Botón para volver a la lista */}
+          {/* Button to return to the list */}
           <Button
-            name="← Volver a la lista"
+            name="← Back to list"
             bg="gray"
             click={handleBackToList}
             style="!mb-4"
           />
 
-          {/* Formulario de edición de orden */}
+          {/* Order editing form */}
           {!isEditingViga ? (
             <div>
-              <h2 className="text-lg font-bold mb-4">Editar Orden</h2>
+              <h2 className="text-lg font-bold mb-4">Edit Order</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Número de Orden
+                    Order Number
                   </label>
                   <Input
                     style="!border-1"
@@ -282,13 +281,13 @@ export default function EditOrder() {
                         numero_orden: e.target.value,
                       })
                     }
-                    placeholder="Número de orden"
+                    placeholder="Order number"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Fecha
+                    Date
                   </label>
                   <Input
                     style="!border-1"
@@ -299,18 +298,18 @@ export default function EditOrder() {
                         fecha: e.target.value,
                       })
                     }
-                    placeholder="Fecha (YYYY-MM-DD)"
+                    placeholder="Date (YYYY-MM-DD)"
                   />
                 </div>
               </div>
 
               <div className="flex justify-end mb-6">
-                <Button name="Guardar Cambios" click={handleSaveOrder} />
+                <Button name="Save Changes" click={handleSaveOrder} />
               </div>
 
-              {/* Lista de vigas en la orden */}
+              {/* List of beams in the order */}
               <div className="mt-6">
-                <h3 className="font-semibold mb-2">Vigas en esta orden:</h3>
+                <h3 className="font-semibold mb-2">Beams in this order:</h3>
                 {editedOrder.vigas && editedOrder.vigas.length > 0 ? (
                   <div className="space-y-2">
                     {editedOrder.vigas.map((viga, index) => (
@@ -325,17 +324,17 @@ export default function EditOrder() {
                             </p>
                             <div className="text-sm text-gray-600 mt-1">
                               <p>
-                                Cantidad: {viga.cantidad} | Tipo: {viga.tipo} |
-                                Medidas: {viga.medidas}
+                                Quantity: {viga.cantidad} | Type: {viga.tipo} |
+                                Measurements: {viga.medidas}
                               </p>
                               {viga.cada_una !== "0" &&
                                 viga.cada_una !== "1" && (
-                                  <p>Cada una: {viga.cada_una}/bms</p>
+                                  <p>Each: {viga.cada_una}/bms</p>
                                 )}
                             </div>
                           </div>
                           <Button
-                            name="Editar"
+                            name="Edit"
                             bg="blue"
                             style="!px-3 !py-1 text-sm"
                             click={() => handleEditViga(viga)}
@@ -346,18 +345,18 @@ export default function EditOrder() {
                   </div>
                 ) : (
                   <p className="text-gray-500 italic">
-                    No hay vigas en esta orden.
+                    No beams in this order.
                   </p>
                 )}
               </div>
             </div>
           ) : (
-            /* Formulario de edición de viga */
+            /* Beam editing form */
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold">Editar Viga</h2>
+                <h2 className="text-lg font-bold">Edit Beam</h2>
                 <Button
-                  name="Volver a la Orden"
+                  name="Back to Order"
                   bg="gray"
                   style="!px-3 !py-1 text-sm"
                   click={handleCancelEditViga}
@@ -367,7 +366,7 @@ export default function EditOrder() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nombre
+                    Name
                   </label>
                   <Input
                     style="!border-1"
@@ -378,13 +377,13 @@ export default function EditOrder() {
                         nombre: e.target.value,
                       })
                     }
-                    placeholder="Nombre de la viga"
+                    placeholder="Beam name"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cantidad
+                    Quantity
                   </label>
                   <Input
                     style="!border-1"
@@ -396,13 +395,13 @@ export default function EditOrder() {
                       })
                     }
                     type="number"
-                    placeholder="Cantidad"
+                    placeholder="Quantity"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Medidas
+                    Measurements
                   </label>
                   <Input
                     style="!border-1"
@@ -413,13 +412,13 @@ export default function EditOrder() {
                         medidas: e.target.value,
                       })
                     }
-                    placeholder="Medidas"
+                    placeholder="Measurements"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tipo
+                    Type
                   </label>
                   <select
                     value={editedViga.tipo}
@@ -438,7 +437,7 @@ export default function EditOrder() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cada Una
+                    Each
                   </label>
                   <Input
                     style="!border-1"
@@ -449,13 +448,13 @@ export default function EditOrder() {
                         cada_una: e.target.value,
                       })
                     }
-                    placeholder="Cada una (opcional)"
+                    placeholder="Each (optional)"
                   />
                 </div>
               </div>
 
               <div className="flex justify-end mt-6">
-                <Button name="Guardar Viga" click={handleSaveViga} />
+                <Button name="Save Beam" click={handleSaveViga} />
               </div>
             </div>
           )}

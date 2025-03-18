@@ -12,13 +12,13 @@ export default function Letter({ setView, view }) {
     <div className="flex gap-4 max-md:flex-col justify-between items-center mb-4 p-2">
       <div className="flex items-center justify-between w-full">
         <span className="mr-4 text-gray-600">
-          Usuario: {username || "Admin"}
+          User: {username || "Admin"}
         </span>
         <button
           onClick={handleLogout}
           className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
         >
-          Cerrar Sesión
+          Logout
         </button>
       </div>
       <div className="flex items-center max-md:grid gap-2 w-full">
