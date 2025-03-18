@@ -21,8 +21,6 @@ export default function Login() {
     setLoading(true);
 
     try {
-      console.log("Intentando login con:", { username, password });
-      console.log("URL:", `${API_LOCAL}login/`);
 
       // Llamada a la API de login
       const response = await axios.post(`${API_LOCAL}login/`, {
