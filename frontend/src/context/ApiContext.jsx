@@ -25,7 +25,7 @@ export const ApiProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     
     return axios.create({
-      baseURL: API_LOCAL,
+      baseURL: API_BASE,
       headers: {
         "Content-Type": "application/json",
         ...(token ? { "Authorization": `Token ${token}` } : {})
