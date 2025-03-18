@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
+import Cookies from "js-cookie"; // Add this import
 import Loader from "../components/Vistas/Loader";
 import { useAuth } from "./AuthContext";
 
