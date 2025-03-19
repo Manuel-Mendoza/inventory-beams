@@ -9,7 +9,7 @@ export default function Letter({ setView, view }) {
   };
 
   return (
-    <div className="flex gap-4 max-md:flex-col justify-between items-center mb-4 p-2">
+    <div className="flex gap-4 flex-col justify-between items-center mb-4 p-2">
       <div className="flex items-center justify-between w-full">
         <span className="mr-4 text-gray-600">
           User: {username || "Admin"}
@@ -21,9 +21,9 @@ export default function Letter({ setView, view }) {
           Logout
         </button>
       </div>
-      <div className="flex items-center max-md:grid gap-2 w-full">
-        <h1 className="text-2xl font-bold text-gray-800">Inventory Beams</h1>
-        <div className="space-x-4 max-md:grid gap-2">
+      <div className="flex flex-col items-center max-md:grid gap-2 w-full">
+        <h1 className="text-2xl text-start w-full font-bold text-gray-800">Inventory Beams</h1>
+        <div className="space-x-4 grid gap-2 min-md:grid-cols-3">
           <button
             onClick={() => setView("index")}
             className={`px-4 py-2 rounded-md mr-0 w-full ${

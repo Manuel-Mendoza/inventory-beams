@@ -27,7 +27,7 @@ export const ApiProvider = ({ children }) => {
     const csrfToken = Cookies.get("csrftoken");
 
     return axios.create({
-      baseURL: API_BASE,
+      baseURL: API_LOCAL,
       headers: {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Token ${token}` } : {}),
